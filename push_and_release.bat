@@ -83,8 +83,7 @@ if not exist raylib (
 
 REM Setup Visual Studio environment
 echo [INFO] Setting up Visual Studio environment...
-for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%
-Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do (
+for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do (
     set "VS_INSTALL_PATH=%%i"
 )
 
