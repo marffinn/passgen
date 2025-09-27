@@ -4,6 +4,16 @@ setlocal
 echo [INFO] Password Generator - Automated Release Process
 echo =====================================================
 
+REM Check if .env file exists
+if not exist ".env" (
+    echo [ERROR] .env file not found
+    echo [INFO] Create .env file with: GITHUB_TOKEN=your_token_here
+    pause
+    exit /b 1
+)
+
+echo [DEBUG] .env file found, loading token...
+
 REM Load GitHub token from .env file
 for /f "tokens=1* delims==" %%a in ('type .env ^| findstr /b "GITHUB_TOKEN="') do (
     set "GH_TOKEN=%%b"
@@ -11,14 +21,13 @@ for /f "tokens=1* delims==" %%a in ('type .env ^| findstr /b "GITHUB_TOKEN="') d
 
 if not defined GH_TOKEN (
     echo [ERROR] GITHUB_TOKEN not found in .env file
-    echo [INFO] Create .env file with: GITHUB_TOKEN=your_token_here
+    echo [DEBUG] .env file contents:
+    type .env
     pause
     exit /b 1
 )
 
-echo [DEBUG] Token loaded: %GH_TOKEN:~0,10%...
-echo [DEBUG] Token length: 
-echo %GH_TOKEN%| find /c /v "" >nul && echo Token exists
+echo [DEBUG] Token loaded successfully (first 10 chars): %GH_TOKEN:~0,10%...
 
 REM Get the latest tag
 for /f "tokens=*" %%i in ('git describe --tags --abbrev=0 2^>nul') do set LATEST_TAG=%%i
@@ -54,9 +63,9 @@ if /i not "%CONFIRM%"=="y" (
     exit /b 1
 )
 
-REM Set up GitHub repository URL with token
-set "GITHUB_USERNAME=marffinn"
-set "REPO_URL=https://%GITHUB_USERNAME%:%GH_TOKEN%@github.com/marffinn/passgen.git"
+REM Set up GitHub repository URL with token (token as username, empty password)
+set "REPO_URL=https://%GH_TOKEN%@github.com/marffinn/passgen.git"
+echo [DEBUG] Using repository URL with token authentication
 
 REM Check if tag exists and delete if necessary
 echo [INFO] Checking for existing tag %NEW_TAG%...
