@@ -87,17 +87,10 @@ REM Compile resource file
 echo [INFO] Compiling resource file...
 rc icon.rc
 
-REM Embed assets
-echo [INFO] Embedding assets...
-echo // Auto-generated embedded assets > embedded_assets.h
-echo const unsigned char FONT_DATA[] = { >> embedded_assets.h
-powershell -command "$bytes = [System.IO.File]::ReadAllBytes('assets/fonts/FreePixel.ttf'); ($bytes | ForEach-Object { '0x{0:X2}' -f $_ }) -join ',' | Out-File -Append -Encoding ASCII embedded_assets.h"
-echo }; >> embedded_assets.h
-powershell -command "$bytes = [System.IO.File]::ReadAllBytes('assets/fonts/FreePixel.ttf'); 'const int FONT_SIZE = ' + $bytes.Length + ';' | Out-File -Append -Encoding ASCII embedded_assets.h"
-echo const unsigned char ICON_DATA[] = { >> embedded_assets.h
-powershell -command "$bytes = [System.IO.File]::ReadAllBytes('assets/icons/password_64x64.png'); ($bytes | ForEach-Object { '0x{0:X2}' -f $_ }) -join ',' | Out-File -Append -Encoding ASCII embedded_assets.h"
-echo }; >> embedded_assets.h
-powershell -command "$bytes = [System.IO.File]::ReadAllBytes('assets/icons/password_64x64.png'); 'const int ICON_SIZE = ' + $bytes.Length + ';' | Out-File -Append -Encoding ASCII embedded_assets.h"
+REM Copy assets to build directory
+echo [INFO] Copying assets...
+copy "assets\fonts\FreePixel.ttf" . >nul
+copy "assets\icons\password_64x64.png" . >nul
 
 REM Compile executable
 echo [INFO] Compiling executable...
@@ -106,6 +99,8 @@ cl /EHsc /MD /I raylib\include main.cpp icon.res raylib\lib\raylib.lib user32.li
 REM Clean up build artifacts
 del main.obj 2>nul
 del icon.res 2>nul
+del FreePixel.ttf 2>nul
+del password_64x64.png 2>nul
 
 if exist "PassGen.exe" (
     echo [SUCCESS] Executable built successfully: PassGen.exe
