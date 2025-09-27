@@ -140,17 +140,28 @@ int main() {
     SetTargetFPS(60);
     
     // Load FreePixel fonts from external files
-    Font font20 = LoadFontEx("FreePixel.ttf", 20, 0, 95);
-    Font font16 = LoadFontEx("FreePixel.ttf", 16, 0, 95);
-    Font font14 = LoadFontEx("FreePixel.ttf", 14, 0, 95);
-    Font font12 = LoadFontEx("FreePixel.ttf", 12, 0, 95);
-    Font font10 = LoadFontEx("FreePixel.ttf", 10, 0, 95);
+    Font font20, font16, font14, font12, font10;
     
-    SetTextureFilter(font20.texture, TEXTURE_FILTER_POINT);
-    SetTextureFilter(font16.texture, TEXTURE_FILTER_POINT);
-    SetTextureFilter(font14.texture, TEXTURE_FILTER_POINT);
-    SetTextureFilter(font12.texture, TEXTURE_FILTER_POINT);
-    SetTextureFilter(font10.texture, TEXTURE_FILTER_POINT);
+    if (FileExists("FreePixel.ttf")) {
+        font20 = LoadFontEx("FreePixel.ttf", 20, 0, 95);
+        font16 = LoadFontEx("FreePixel.ttf", 16, 0, 95);
+        font14 = LoadFontEx("FreePixel.ttf", 14, 0, 95);
+        font12 = LoadFontEx("FreePixel.ttf", 12, 0, 95);
+        font10 = LoadFontEx("FreePixel.ttf", 10, 0, 95);
+        
+        SetTextureFilter(font20.texture, TEXTURE_FILTER_POINT);
+        SetTextureFilter(font16.texture, TEXTURE_FILTER_POINT);
+        SetTextureFilter(font14.texture, TEXTURE_FILTER_POINT);
+        SetTextureFilter(font12.texture, TEXTURE_FILTER_POINT);
+        SetTextureFilter(font10.texture, TEXTURE_FILTER_POINT);
+    } else {
+        // Fallback to default font if FreePixel.ttf not found
+        font20 = GetFontDefault();
+        font16 = GetFontDefault();
+        font14 = GetFontDefault();
+        font12 = GetFontDefault();
+        font10 = GetFontDefault();
+    }
     
     // Set window icon from external file
     if (FileExists("password_64x64.png")) {

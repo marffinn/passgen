@@ -90,14 +90,16 @@ rc icon.rc
 REM Copy assets to build directory
 echo [INFO] Copying assets...
 if exist "assets\fonts\FreePixel.ttf" (
-    copy "assets\fonts\FreePixel.ttf" . >nul
+    copy "assets\fonts\FreePixel.ttf" . 
+    echo [DEBUG] Copied FreePixel.ttf
 ) else (
-    echo [WARNING] FreePixel.ttf not found
+    echo [ERROR] FreePixel.ttf not found in assets\fonts\
 )
 if exist "assets\icons\password_64x64.png" (
-    copy "assets\icons\password_64x64.png" . >nul
+    copy "assets\icons\password_64x64.png" . 
+    echo [DEBUG] Copied password_64x64.png
 ) else (
-    echo [WARNING] password_64x64.png not found
+    echo [ERROR] password_64x64.png not found in assets\icons\
 )
 
 REM Compile executable
@@ -107,8 +109,6 @@ cl /EHsc /MD /I raylib\include main.cpp icon.res raylib\lib\raylib.lib user32.li
 REM Clean up build artifacts
 del main.obj 2>nul
 del icon.res 2>nul
-del FreePixel.ttf 2>nul
-del password_64x64.png 2>nul
 
 if exist "PassGen.exe" (
     echo [SUCCESS] Executable built successfully: PassGen.exe
