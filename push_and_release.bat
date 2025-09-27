@@ -109,11 +109,28 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
+echo [INFO] Building executable locally...
+if exist "compile.bat" (
+    call compile.bat
+    if exist "PasswordGenerator.exe" (
+        echo [SUCCESS] Executable built successfully!
+    ) else (
+        echo [ERROR] Build failed - executable not found
+        pause
+        exit /b 1
+    )
+) else (
+    echo [ERROR] compile.bat not found
+    pause
+    exit /b 1
+)
+
 echo [SUCCESS] Release %NEW_TAG% created successfully!
-echo [INFO] GitHub Actions will create a draft release
-echo [INFO] Now build the executable locally:
-echo [INFO] 1. Run: compile.bat
-echo [INFO] 2. Go to: https://github.com/marffinn/passgen/releases
-echo [INFO] 3. Edit the draft release and upload PasswordGenerator.exe
-echo [INFO] 4. Publish the release
+echo [INFO] Executable: PasswordGenerator.exe
+echo [INFO] Manual steps:
+echo [INFO] 1. Go to: https://github.com/marffinn/passgen/releases
+echo [INFO] 2. Click "Create a new release"
+echo [INFO] 3. Choose tag: %NEW_TAG%
+echo [INFO] 4. Upload PasswordGenerator.exe
+echo [INFO] 5. Publish the release
 pause
