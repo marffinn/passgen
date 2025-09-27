@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Generator - Secure Password Management</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #e0e0e0; background: #0d1117; }
@@ -41,7 +42,7 @@
     </style>
 </head>
 <body>
-    <header>
+    <header data-aos="fade-down">
         <div class="container">
             <img src="password.png" alt="Password Generator Logo" class="logo">
             <h1>Password Generator</h1>
@@ -49,7 +50,7 @@
         </div>
     </header>
 
-    <section class="hero">
+    <section class="hero" data-aos="fade-in">
         <div class="container">
             <img src="password.png" alt="Password Generator" class="hero-logo">
             <h2>Generate Strong Passwords with Encrypted Storage</h2>
@@ -74,29 +75,29 @@
 
     <section class="features">
         <div class="container">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Features</h2>
+            <h2 style="text-align: center; margin-bottom: 2rem;" data-aos="fade-up">Features</h2>
             <div class="feature-grid">
-                <div class="feature">
+                <div class="feature" data-aos="fade-up" data-aos-delay="100">
                     <h3>🔐 Secure Generation</h3>
                     <p>Generate passwords from 4-50 characters with customizable complexity using cryptographically secure random generation.</p>
                 </div>
-                <div class="feature">
+                <div class="feature" data-aos="fade-up" data-aos-delay="200">
                     <h3>📚 Encrypted Storage</h3>
                     <p>Store and manage passwords with XOR encryption. All data is stored locally in an encrypted file format.</p>
                 </div>
-                <div class="feature">
+                <div class="feature" data-aos="fade-up" data-aos-delay="300">
                     <h3>🎨 Clean Interface</h3>
                     <p>Retro-style pixel art UI with embedded custom fonts. Clean, intuitive design for easy password management.</p>
                 </div>
-                <div class="feature">
+                <div class="feature" data-aos="fade-up" data-aos-delay="400">
                     <h3>📱 Portable</h3>
                     <p>Single executable with all assets embedded. No installation required - just download and run.</p>
                 </div>
-                <div class="feature">
+                <div class="feature" data-aos="fade-up" data-aos-delay="500">
                     <h3>⚡ Fast & Lightweight</h3>
                     <p>Built with Raylib for optimal performance. Minimal resource usage and instant startup.</p>
                 </div>
-                <div class="feature">
+                <div class="feature" data-aos="fade-up" data-aos-delay="600">
                     <h3>📋 One-Click Copy</h3>
                     <p>Copy passwords to clipboard with a single click. Keyboard shortcuts for quick access.</p>
                 </div>
@@ -104,7 +105,7 @@
         </div>
     </section>
 
-    <section class="download">
+    <section class="download" data-aos="fade-in">
         <div class="container">
             <h2>Ready to Secure Your Passwords?</h2>
             <p>Choose your preferred download option and start generating secure passwords today!</p>
@@ -132,5 +133,9 @@
             <p><a href="https://github.com/marffinn/passgen" style="color: #58a6ff;">GitHub Repository</a> • MIT License</p>
         </div>
     </footer>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
 </body>
 </html>

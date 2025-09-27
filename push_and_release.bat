@@ -86,7 +86,8 @@ if not exist raylib (
 
 REM Setup Visual Studio environment
 echo [INFO] Setting up Visual Studio environment...
-for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do (
+for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%
+Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do (
     set "VS_INSTALL_PATH=%%i"
 )
 
@@ -146,7 +147,9 @@ REM Build NSIS installer
 echo [INFO] Building NSIS installer...
 where makensis >nul 2>&1
 if %errorlevel% equ 0 (
-    makensis installer.nsi
+    cd bin
+    makensis ..\installer.nsi
+    cd ..
     if exist "bin\PassGenInstaller.exe" (
         echo [SUCCESS] Installer built successfully: bin\PassGenInstaller.exe
     ) else (
