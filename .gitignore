@@ -35,6 +35,11 @@ compile.bat
 embed_assets.bat
 icon.rc
 push_and_release.bat
+build_installer.bat
+installer.nsi
+
+# Installer output
+PassGenInstaller.exe
 
 # Windows specific
 Thumbs.db

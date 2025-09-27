@@ -62,7 +62,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo [INFO] Building executable locally...
+echo [INFO] Building executable and installer locally...
 if exist "compile.bat" (
     call compile.bat
     if exist "PassGen.exe" (
@@ -76,8 +76,24 @@ if exist "compile.bat" (
     exit /b 1
 )
 
-echo [INFO] Creating GitHub release with executable...
-gh release create %NEW_TAG% PassGen.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with encrypted storage. Download PassGen.exe and run directly - no installation required. Windows 10/11 x64."
+echo [INFO] Building NSIS installer...
+if exist "build_installer.bat" (
+    call build_installer.bat
+    if exist "PassGenInstaller.exe" (
+        echo [SUCCESS] Installer built successfully: PassGenInstaller.exe
+    ) else (
+        echo [WARNING] Installer build failed - continuing without installer
+    )
+) else (
+    echo [WARNING] build_installer.bat not found - skipping installer
+)
+
+echo [INFO] Creating GitHub release with executable and installer...
+if exist "PassGenInstaller.exe" (
+    gh release create %NEW_TAG% PassGen.exe PassGenInstaller.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with encrypted storage. Download PassGen.exe (portable) or PassGenInstaller.exe (installer). Windows 10/11 x64."
+) else (
+    gh release create %NEW_TAG% PassGen.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with encrypted storage. Download PassGen.exe and run directly - no installation required. Windows 10/11 x64."
+)
 if %errorlevel% neq 0 (
     echo [ERROR] Failed to create GitHub release
     echo [INFO] Manual steps:
