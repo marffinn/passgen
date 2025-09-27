@@ -50,9 +50,12 @@ if %errorlevel% neq 0 (
 )
 
 echo [INFO] Creating new tag %NEW_TAG%...
+REM Delete tag if it exists locally
+git tag -d %NEW_TAG% >nul 2>&1
+REM Create new tag
 git tag %NEW_TAG%
 if %errorlevel% neq 0 (
-    echo [ERROR] Failed to create tag (may already exist locally)
+    echo [ERROR] Failed to create tag
     exit /b 1
 )
 echo [DEBUG] Tag created successfully
