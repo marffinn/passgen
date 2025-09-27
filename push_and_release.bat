@@ -133,18 +133,22 @@ if %errorlevel% equ 0 (
 
 echo [INFO] Creating GitHub release with executable and installer...
 if exist "PassGenInstaller.exe" (
-    gh release create %NEW_TAG% PassGen.exe PassGenInstaller.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with encrypted storage. Download PassGen.exe (portable) or PassGenInstaller.exe (installer). Windows 10/11 x64."
+    echo [DEBUG] Uploading both PassGen.exe and PassGenInstaller.exe
+    gh release create %NEW_TAG% PassGen.exe PassGenInstaller.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with custom encryption. Download PassGen.exe (portable) or PassGenInstaller.exe (installer). Windows 10/11 x64."
 ) else (
-    gh release create %NEW_TAG% PassGen.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with encrypted storage. Download PassGen.exe and run directly - no installation required. Windows 10/11 x64."
+    echo [DEBUG] Uploading only PassGen.exe
+    gh release create %NEW_TAG% PassGen.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with custom encryption. Download PassGen.exe and run directly - no installation required. Windows 10/11 x64."
 )
 if %errorlevel% neq 0 (
-    echo [ERROR] Failed to create GitHub release
+    echo [ERROR] Failed to create GitHub release (exit code: %errorlevel%)
     echo [INFO] Manual steps:
     echo [INFO] 1. Go to: https://github.com/marffinn/passgen/releases
     echo [INFO] 2. Click "Create a new release"
     echo [INFO] 3. Choose tag: %NEW_TAG%
-    echo [INFO] 4. Upload PassGen.exe
+    echo [INFO] 4. Upload PassGen.exe and PassGenInstaller.exe
     exit /b 1
+) else (
+    echo [DEBUG] GitHub release created successfully
 )
 
 echo [SUCCESS] Release %NEW_TAG% created successfully!
