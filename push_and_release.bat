@@ -4,6 +4,9 @@ setlocal
 echo [INFO] Password Generator - Automated Release Process
 echo =====================================================
 
+REM Create bin directory
+if not exist bin mkdir bin
+
 REM Check if .env file exists
 if not exist ".env" (
     echo [ERROR] .env file not found
@@ -27,9 +30,15 @@ if not defined GH_TOKEN (
 
 echo [DEBUG] Token loaded successfully (first 10 chars): %GH_TOKEN:~0,10%...
 
-REM Generate automatic version using random number
-set /a "BUILD_NUM=%RANDOM%"
-set NEW_TAG=v1.0.%BUILD_NUM%
+REM Generate version based on date and time
+for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /format:list') do set "DATETIME=%%I"
+set "YYYY=%DATETIME:~0,4%"
+set "MM=%DATETIME:~4,2%"
+set "DD=%DATETIME:~6,2%"
+set "HH=%DATETIME:~8,2%"
+set "MIN=%DATETIME:~10,2%"
+set "SS=%DATETIME:~12,2%"
+set "NEW_TAG=v1.0.%YYYY%%MM%%DD%-%HH%%MIN%%SS%"
 
 echo [INFO] Auto-generating version: %NEW_TAG%
 
@@ -83,12 +92,19 @@ if not exist raylib (
 
 REM Setup Visual Studio environment
 echo [INFO] Setting up Visual Studio environment...
-for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do (
+for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%
+Microsoft Visual Studio
+Installer
+vswhere.exe" -latest -property installationPath`) do (
     set "VS_INSTALL_PATH=%%i"
 )
 
 if defined VS_INSTALL_PATH (
-    call "%VS_INSTALL_PATH%\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1
+    call "%VS_INSTALL_PATH%
+VC
+Auxiliary
+Build
+vcvars64.bat" >nul 2>&1
     echo [INFO] Visual Studio environment set up successfully.
 ) else (
     echo [ERROR] Visual Studio not found. Please install Visual Studio.
@@ -125,17 +141,17 @@ echo [DEBUG] Assets embedded successfully
 
 REM Compile executable
 echo [INFO] Compiling executable...
-cl /EHsc /MD /I raylib\include main.cpp icon.res raylib\lib\raylib.lib user32.lib gdi32.lib winmm.lib shell32.lib msvcrt.lib /Fe:PassGen.exe /link /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup
+cl /EHsc /MD /I raylib\include main.cpp icon.res raylib\lib\raylib.lib user32.lib gdi32.lib winmm.lib shell32.lib msvcrt.lib /Fe:bin\PassGen.exe /link /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup
 
 REM Clean up build artifacts
 del main.obj 2>nul
 del icon.res 2>nul
 del embedded_assets.h 2>nul
 
-if exist "PassGen.exe" (
-    echo [SUCCESS] Executable built successfully: PassGen.exe
+if exist "bin\PassGen.exe" (
+    echo [SUCCESS] Executable built successfully: bin\PassGen.exe
 ) else (
-    echo [ERROR] Build failed - PassGen.exe not found
+    echo [ERROR] Build failed - bin\PassGen.exe not found
     exit /b 1
 )
 
@@ -144,8 +160,8 @@ echo [INFO] Building NSIS installer...
 where makensis >nul 2>&1
 if %errorlevel% equ 0 (
     makensis installer.nsi
-    if exist "PassGenInstaller.exe" (
-        echo [SUCCESS] Installer built successfully: PassGenInstaller.exe
+    if exist "bin\PassGenInstaller.exe" (
+        echo [SUCCESS] Installer built successfully: bin\PassGenInstaller.exe
     ) else (
         echo [WARNING] Installer build failed - continuing without installer
     )
@@ -154,12 +170,12 @@ if %errorlevel% equ 0 (
 )
 
 echo [INFO] Creating GitHub release with executable and installer...
-if exist "PassGenInstaller.exe" (
+if exist "bin\PassGenInstaller.exe" (
     echo [DEBUG] Uploading both PassGen.exe and PassGenInstaller.exe
-    gh release create %NEW_TAG% PassGen.exe PassGenInstaller.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with custom encryption. Download PassGen.exe (portable) or PassGenInstaller.exe (installer). Windows 10/11 x64."
+    gh release create %NEW_TAG% bin\PassGen.exe bin\PassGenInstaller.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with custom encryption. Download PassGen.exe (portable) or PassGenInstaller.exe (installer). Windows 10/11 x64."
 ) else (
     echo [DEBUG] Uploading only PassGen.exe
-    gh release create %NEW_TAG% PassGen.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with custom encryption. Download PassGen.exe and run directly - no installation required. Windows 10/11 x64."
+    gh release create %NEW_TAG% bin\PassGen.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with custom encryption. Download PassGen.exe and run directly - no installation required. Windows 10/11 x64."
 )
 if %errorlevel% neq 0 (
     echo [ERROR] Failed to create GitHub release (exit code: %errorlevel%)
@@ -167,7 +183,7 @@ if %errorlevel% neq 0 (
     echo [INFO] 1. Go to: https://github.com/marffinn/passgen/releases
     echo [INFO] 2. Click "Create a new release"
     echo [INFO] 3. Choose tag: %NEW_TAG%
-    echo [INFO] 4. Upload PassGen.exe and PassGenInstaller.exe
+    echo [INFO] 4. Upload bin\PassGen.exe and bin\PassGenInstaller.exe
     exit /b 1
 ) else (
     echo [DEBUG] GitHub release created successfully
@@ -175,12 +191,11 @@ if %errorlevel% neq 0 (
 
 echo [SUCCESS] Release %NEW_TAG% created successfully!
 echo [INFO] Release URL: https://github.com/marffinn/passgen/releases/tag/%NEW_TAG%
-echo [INFO] Executable uploaded: PassGen.exe
+echo [INFO] Executable uploaded: bin\PassGen.exe
 
 echo [INFO] Cleaning up build artifacts...
-del PassGen.exe 2>nul
-del PassGenInstaller.exe 2>nul
+del bin\PassGen.exe 2>nul
+del bin\PassGenInstaller.exe 2>nul
 del embedded_assets.h 2>nul
-rmdir /s /q raylib 2>nul
 
 start https://github.com/marffinn/passgen/releases/tag/%NEW_TAG%
