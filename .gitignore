@@ -24,6 +24,9 @@ build/
 # Password data (encrypted)
 passwords.dat
 
+# Environment variables (contains sensitive tokens)
+.env
+
 # Generated assets
 embedded_assets.h
 
@@ -31,6 +34,7 @@ embedded_assets.h
 compile.bat
 embed_assets.bat
 icon.rc
+push_and_release.bat
 
 # Windows specific
 Thumbs.db
