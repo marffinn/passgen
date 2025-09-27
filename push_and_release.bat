@@ -89,8 +89,16 @@ rc icon.rc
 
 REM Copy assets to build directory
 echo [INFO] Copying assets...
-copy "assets\fonts\FreePixel.ttf" . >nul
-copy "assets\icons\password_64x64.png" . >nul
+if exist "assets\fonts\FreePixel.ttf" (
+    copy "assets\fonts\FreePixel.ttf" . >nul
+) else (
+    echo [WARNING] FreePixel.ttf not found
+)
+if exist "assets\icons\password_64x64.png" (
+    copy "assets\icons\password_64x64.png" . >nul
+) else (
+    echo [WARNING] password_64x64.png not found
+)
 
 REM Compile executable
 echo [INFO] Compiling executable...

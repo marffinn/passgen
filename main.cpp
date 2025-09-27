@@ -153,10 +153,12 @@ int main() {
     SetTextureFilter(font10.texture, TEXTURE_FILTER_POINT);
     
     // Set window icon from external file
-    Image iconImage = LoadImage("password_64x64.png");
-    if (iconImage.data != NULL) {
-        SetWindowIcon(iconImage);
-        UnloadImage(iconImage);
+    if (FileExists("password_64x64.png")) {
+        Image iconImage = LoadImage("password_64x64.png");
+        if (iconImage.data != NULL) {
+            SetWindowIcon(iconImage);
+            UnloadImage(iconImage);
+        }
     }
     
     PasswordGenerator passGen;
