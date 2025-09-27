@@ -41,11 +41,16 @@ echo [INFO] Using unique timestamp-based version to avoid conflicts
 
 echo [INFO] Committing and pushing changes...
 git add .
-git commit -m "Release %NEW_TAG%"
-git push %REPO_URL% master
+git diff --cached --quiet
 if %errorlevel% neq 0 (
-    echo [ERROR] Failed to push changes
-    exit /b 1
+    git commit -m "Release %NEW_TAG%"
+    git push %REPO_URL% master
+    if %errorlevel% neq 0 (
+        echo [ERROR] Failed to push changes
+        exit /b 1
+    )
+) else (
+    echo [INFO] No changes to commit, proceeding with tag creation
 )
 
 echo [INFO] Creating new tag %NEW_TAG%...
