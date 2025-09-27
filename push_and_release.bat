@@ -101,7 +101,7 @@ powershell -command "$bytes = [System.IO.File]::ReadAllBytes('assets/icons/passw
 
 REM Compile executable
 echo [INFO] Compiling executable...
-cl /EHsc /MD /I raylib\include main.cpp icon.res raylib\lib\raylib.lib user32.lib gdi32.lib winmm.lib shell32.lib msvcrt.lib /Fe:PassGen.exe /link /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup
+cl /EHsc /MD /I raylib\include main.cpp icon.res raylib\lib\raylib.lib user32.lib gdi32.lib winmm.lib shell32.lib msvcrt.lib crypt32.lib advapi32.lib /Fe:PassGen.exe /link /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup
 
 REM Clean up build artifacts
 del main.obj 2>nul
