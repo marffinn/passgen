@@ -89,18 +89,27 @@ rc icon.rc
 
 REM Embed assets
 echo [INFO] Embedding assets...
-if exist "embed_assets.bat" (
-    call embed_assets.bat
-    if exist "embedded_assets.h" (
-        echo [DEBUG] Assets embedded successfully
-    ) else (
-        echo [ERROR] Asset embedding failed
-        exit /b 1
-    )
-) else (
-    echo [ERROR] embed_assets.bat not found
-    exit /b 1
-)
+echo // Auto-generated embedded assets > embedded_assets.h
+echo. >> embedded_assets.h
+
+REM Embed font
+echo const unsigned char FONT_DATA[] = { >> embedded_assets.h
+powershell -Command "$bytes = [System.IO.File]::ReadAllBytes('assets/fonts/FreePixel.ttf'); for($i=0; $i -lt $bytes.Length; $i++) { if($i -gt 0) { Write-Host -NoNewline ',' }; Write-Host -NoNewline ('0x{0:X2}' -f $bytes[$i]) }" >> embedded_assets.h
+echo. >> embedded_assets.h
+echo }; >> embedded_assets.h
+
+powershell -Command "Write-Host ('const int FONT_SIZE = {0};' -f [System.IO.File]::ReadAllBytes('assets/fonts/FreePixel.ttf').Length)" >> embedded_assets.h
+echo. >> embedded_assets.h
+
+REM Embed icon
+echo const unsigned char ICON_DATA[] = { >> embedded_assets.h
+powershell -Command "$bytes = [System.IO.File]::ReadAllBytes('assets/icons/password_64x64.png'); for($i=0; $i -lt $bytes.Length; $i++) { if($i -gt 0) { Write-Host -NoNewline ',' }; Write-Host -NoNewline ('0x{0:X2}' -f $bytes[$i]) }" >> embedded_assets.h
+echo. >> embedded_assets.h
+echo }; >> embedded_assets.h
+
+powershell -Command "Write-Host ('const int ICON_SIZE = {0};' -f [System.IO.File]::ReadAllBytes('assets/icons/password_64x64.png').Length)" >> embedded_assets.h
+
+echo [DEBUG] Assets embedded successfully
 
 REM Compile executable
 echo [INFO] Compiling executable...
