@@ -11,6 +11,8 @@
         header { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); color: white; padding: 2rem 0; text-align: center; border-bottom: 1px solid #30363d; }
         h1 { font-size: 3rem; margin-bottom: 0.5rem; }
         .subtitle { font-size: 1.2rem; opacity: 0.8; }
+        .logo { width: 80px; height: 80px; margin-bottom: 1rem; }
+        .hero-logo { width: 120px; height: 120px; margin-bottom: 2rem; }
         .hero { padding: 4rem 0; text-align: center; background: #161b22; }
         .features { padding: 4rem 0; background: #0d1117; }
         .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
@@ -30,13 +32,15 @@
 <body>
     <header>
         <div class="container">
-            <h1>🔐 Password Generator</h1>
+            <img src="password.png" alt="Password Generator Logo" class="logo">
+            <h1>Password Generator</h1>
             <p class="subtitle">Secure, Portable Password Management</p>
         </div>
     </header>
 
     <section class="hero">
         <div class="container">
+            <img src="password.png" alt="Password Generator" class="hero-logo">
             <h2>Generate Strong Passwords with Encrypted Storage</h2>
             <p>A lightweight, secure password generator with encrypted password library built using C++ and Raylib.</p>
             <a href="https://github.com/marffinn/passgen/releases/latest/download/PassGen.exe" class="btn">Download PassGen.exe</a>

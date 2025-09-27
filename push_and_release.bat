@@ -29,57 +29,19 @@ if not defined GH_TOKEN (
 
 echo [DEBUG] Token loaded successfully (first 10 chars): %GH_TOKEN:~0,10%...
 
-REM Fetch latest tags
-git fetch --tags >nul 2>&1
+REM Generate automatic version using timestamp
+for /f "tokens=1-3 delims=/" %%a in ('%date%') do set TODAY=%%c%%a%%b
+for /f "tokens=1-2 delims=:" %%a in ('%time%') do set NOW=%%a%%b
+set VERSION=%TODAY:~2,2%%TODAY:~5,2%%TODAY:~8,2%.%NOW:~0,2%%NOW:~3,2%
+set NEW_TAG=v1.0.%VERSION%
 
-REM Get latest version tag
-set LATEST_TAG=
-for /f "delims=" %%i in ('git tag -l "v*.*.*" 2^>nul') do set LATEST_TAG=%%i
-
-REM If no tags exist, start with v1.0.0
-if "%LATEST_TAG%"=="" (
-    set NEW_TAG=v1.0.0
-    echo [INFO] No previous tags found. Starting with v1.0.0
-) else (
-    echo [INFO] Latest tag: %LATEST_TAG%
-    
-    REM Simple increment: extract numbers and add 1 to patch
-    set TAG_NO_V=%LATEST_TAG:~1%
-    for /f "tokens=1,2,3 delims=." %%a in ("%TAG_NO_V%") do (
-        set MAJOR=%%a
-        set MINOR=%%b
-        set PATCH=%%c
-    )
-    
-    REM Increment patch version
-    set /a PATCH+=1
-    set NEW_TAG=v%MAJOR%.%MINOR%.%PATCH%
-)
-
-echo [INFO] New version will be: %NEW_TAG%
-echo.
-
-REM Confirm with user
-set /p CONFIRM="Continue with release %NEW_TAG%? (y/n): "
-if /i not "%CONFIRM%"=="y" (
-    echo [INFO] Release cancelled.
-    pause
-    exit /b 1
-)
+echo [INFO] Auto-generating version: %NEW_TAG%
 
 REM Set up GitHub repository URL with token (token as username, empty password)
 set "REPO_URL=https://%GH_TOKEN%@github.com/marffinn/passgen.git"
 echo [DEBUG] Using repository URL with token authentication
 
-REM Check if tag already exists
-echo [INFO] Checking if tag %NEW_TAG% already exists...
-git ls-remote --tags origin %NEW_TAG% | findstr /C:"refs/tags/%NEW_TAG%" >nul 2>&1
-if %errorlevel% equ 0 (
-    echo [ERROR] Tag %NEW_TAG% already exists on remote!
-    echo [INFO] Please delete it manually or wait for auto-increment
-    pause
-    exit /b 1
-)
+echo [INFO] Using unique timestamp-based version to avoid conflicts
 
 echo [INFO] Committing and pushing changes...
 git add .
