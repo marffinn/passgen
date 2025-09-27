@@ -16,6 +16,10 @@ if not defined GH_TOKEN (
     exit /b 1
 )
 
+echo [DEBUG] Token loaded: %GH_TOKEN:~0,10%...
+echo [DEBUG] Token length: 
+echo %GH_TOKEN%| find /c /v "" >nul && echo Token exists
+
 REM Get the latest tag
 for /f "tokens=*" %%i in ('git describe --tags --abbrev=0 2^>nul') do set LATEST_TAG=%%i
 
@@ -56,10 +60,12 @@ set "REPO_URL=https://%GITHUB_USERNAME%:%GH_TOKEN%@github.com/marffinn/passgen.g
 
 REM Check if tag exists and delete if necessary
 echo [INFO] Checking for existing tag %NEW_TAG%...
-git tag -l %NEW_TAG% >nul 2>&1
+git tag -l %NEW_TAG% | findstr /C:"%NEW_TAG%" >nul 2>&1
 if %errorlevel% equ 0 (
     echo [INFO] Deleting existing local tag %NEW_TAG%...
     git tag -d %NEW_TAG%
+) else (
+    echo [INFO] Local tag %NEW_TAG% does not exist
 )
 
 git ls-remote --tags origin %NEW_TAG% | findstr /C:"refs/tags/%NEW_TAG%" >nul 2>&1
