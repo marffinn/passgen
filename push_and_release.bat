@@ -55,6 +55,7 @@ if %errorlevel% neq 0 (
     echo [ERROR] Failed to create tag (may already exist locally)
     exit /b 1
 )
+echo [DEBUG] Tag created successfully
 
 echo [INFO] Pushing tag to GitHub...
 git push %REPO_URL% %NEW_TAG%
@@ -62,6 +63,7 @@ if %errorlevel% neq 0 (
     echo [ERROR] Failed to push tag
     exit /b 1
 )
+echo [DEBUG] Tag pushed successfully
 
 echo [INFO] Building executable and installer locally...
 if exist "compile.bat" (
