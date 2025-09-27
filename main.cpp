@@ -224,7 +224,7 @@ int main() {
         if (copiedTimer == 0) copied = false;
         
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(DARKGRAY);
         
         // Top bar with title (centered)
         DrawRectangle(0, 0, screenWidth, 35, DARKBLUE);
@@ -234,7 +234,7 @@ int main() {
         // Password length with slider (centered)
         const char* lengthText = TextFormat("Length: %d", passwordLength);
         Vector2 lengthSize = MeasureTextEx(font16, lengthText, 16, 0);
-        DrawTextEx(font16, lengthText, {centerX - lengthSize.x/2, 45}, 16, 0, BLACK);
+        DrawTextEx(font16, lengthText, {centerX - lengthSize.x/2, 45}, 16, 0, WHITE);
         
         DrawRectangleRec(sliderBar, LIGHTGRAY);
         DrawRectangleRec(sliderKnob, DARKBLUE);
@@ -336,7 +336,7 @@ int main() {
                     Rectangle editBox = {25.0f, yPos - 2.0f, 120.0f, 16.0f};
                     DrawRectangleRec(editBox, WHITE);
                     DrawRectangleLinesEx(editBox, 1, DARKBLUE);
-                    DrawTextEx(font12, editBuffer, {30, yPos}, 12, 0, BLACK);
+                    DrawTextEx(font12, editBuffer, {30, yPos}, 12, 0, WHITE);
                     
                     int key = GetCharPressed();
                     while (key > 0) {
@@ -376,7 +376,7 @@ int main() {
                     // Show password in second column during edit
                     std::string password = libraryPasswords[itemIndex];
                     if (password.length() > 15) password = password.substr(0, 15) + "...";
-                    DrawTextEx(font12, password.c_str(), {150, yPos}, 12, 0, BLACK);
+                    DrawTextEx(font12, password.c_str(), {150, yPos}, 12, 0, WHITE);
                 } else {
                     // Display mode - Service name column
                     Rectangle nameArea = {25.0f, yPos - 2.0f, 120.0f, 16.0f};
@@ -387,12 +387,12 @@ int main() {
                     
                     std::string serviceName = serviceNames[itemIndex];
                     if (serviceName.length() > 12) serviceName = serviceName.substr(0, 12) + "...";
-                    DrawTextEx(font12, serviceName.c_str(), {25, yPos}, 12, 0, BLACK);
+                    DrawTextEx(font12, serviceName.c_str(), {25, yPos}, 12, 0, WHITE);
                     
                     // Password column
                     std::string password = libraryPasswords[itemIndex];
                     if (password.length() > 15) password = password.substr(0, 15) + "...";
-                    DrawTextEx(font12, password.c_str(), {150, yPos}, 12, 0, BLACK);
+                    DrawTextEx(font12, password.c_str(), {150, yPos}, 12, 0, WHITE);
                 }
                 
                 Vector2 copyTextSize = MeasureTextEx(font12, "COPY", 12, 0);
