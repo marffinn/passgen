@@ -4,8 +4,6 @@ setlocal
 echo [INFO] Password Generator - Automated Release Process
 echo =====================================================
 
-if not exist bin mkdir bin
-
 REM Check if .env file exists
 if not exist ".env" (
     echo [ERROR] .env file not found
@@ -83,18 +81,7 @@ if not exist raylib (
 
 REM Setup Visual Studio environment
 echo [INFO] Setting up Visual Studio environment...
-for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%
-Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do (
-    set "VS_INSTALL_PATH=%%i"
-)
-
-if defined VS_INSTALL_PATH (
-    call "%VS_INSTALL_PATH%\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1
-    echo [INFO] Visual Studio environment set up successfully.
-) else (
-    echo [ERROR] Visual Studio not found. Please install Visual Studio.
-    exit /b 1
-)
+call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1
 
 REM Compile resource file
 echo [INFO] Compiling resource file...
@@ -126,17 +113,17 @@ echo [DEBUG] Assets embedded successfully
 
 REM Compile executable
 echo [INFO] Compiling executable...
-cl /EHsc /MD /I raylib\include main.cpp icon.res raylib\lib\raylib.lib user32.lib gdi32.lib winmm.lib shell32.lib msvcrt.lib /Fe:bin\PassGen.exe /link /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup
+cl /EHsc /MD /I raylib\include main.cpp icon.res raylib\lib\raylib.lib user32.lib gdi32.lib winmm.lib shell32.lib msvcrt.lib /Fe:PassGen.exe /link /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup
 
 REM Clean up build artifacts
 del main.obj 2>nul
 del icon.res 2>nul
 del embedded_assets.h 2>nul
 
-if exist "bin\PassGen.exe" (
-    echo [SUCCESS] Executable built successfully: bin\PassGen.exe
+if exist "PassGen.exe" (
+    echo [SUCCESS] Executable built successfully: PassGen.exe
 ) else (
-    echo [ERROR] Build failed - bin\PassGen.exe not found
+    echo [ERROR] Build failed - PassGen.exe not found
     exit /b 1
 )
 
@@ -145,8 +132,8 @@ echo [INFO] Building NSIS installer...
 where makensis >nul 2>&1
 if %errorlevel% equ 0 (
     makensis installer.nsi
-    if exist "bin\PassGenInstaller.exe" (
-        echo [SUCCESS] Installer built successfully: bin\PassGenInstaller.exe
+    if exist "PassGenInstaller.exe" (
+        echo [SUCCESS] Installer built successfully: PassGenInstaller.exe
     ) else (
         echo [WARNING] Installer build failed - continuing without installer
     )
@@ -155,12 +142,12 @@ if %errorlevel% equ 0 (
 )
 
 echo [INFO] Creating GitHub release with executable and installer...
-if exist "bin\PassGenInstaller.exe" (
+if exist "PassGenInstaller.exe" (
     echo [DEBUG] Uploading both PassGen.exe and PassGenInstaller.exe
-    gh release create %NEW_TAG% bin\PassGen.exe bin\PassGenInstaller.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with custom encryption. Download PassGen.exe (portable) or PassGenInstaller.exe (installer). Windows 10/11 x64."
+    gh release create %NEW_TAG% PassGen.exe PassGenInstaller.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with custom encryption. Download PassGen.exe (portable) or PassGenInstaller.exe (installer). Windows 10/11 x64."
 ) else (
     echo [DEBUG] Uploading only PassGen.exe
-    gh release create %NEW_TAG% bin\PassGen.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with custom encryption. Download PassGen.exe and run directly - no installation required. Windows 10/11 x64."
+    gh release create %NEW_TAG% PassGen.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with custom encryption. Download PassGen.exe and run directly - no installation required. Windows 10/11 x64."
 )
 if %errorlevel% neq 0 (
     echo [ERROR] Failed to create GitHub release (exit code: %errorlevel%)
@@ -168,7 +155,7 @@ if %errorlevel% neq 0 (
     echo [INFO] 1. Go to: https://github.com/marffinn/passgen/releases
     echo [INFO] 2. Click "Create a new release"
     echo [INFO] 3. Choose tag: %NEW_TAG%
-    echo [INFO] 4. Upload bin\PassGen.exe and bin\PassGenInstaller.exe
+    echo [INFO] 4. Upload PassGen.exe and PassGenInstaller.exe
     exit /b 1
 ) else (
     echo [DEBUG] GitHub release created successfully
@@ -176,11 +163,11 @@ if %errorlevel% neq 0 (
 
 echo [SUCCESS] Release %NEW_TAG% created successfully!
 echo [INFO] Release URL: https://github.com/marffinn/passgen/releases/tag/%NEW_TAG%
-echo [INFO] Executable uploaded: bin\PassGen.exe
+echo [INFO] Executable uploaded: PassGen.exe
 
 echo [INFO] Cleaning up build artifacts...
-del bin\PassGen.exe 2>nul
-del bin\PassGenInstaller.exe 2>nul
+del PassGen.exe 2>nul
+del PassGenInstaller.exe 2>nul
 del embedded_assets.h 2>nul
 rmdir /s /q raylib 2>nul
 
