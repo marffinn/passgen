@@ -81,7 +81,17 @@ if not exist raylib (
 
 REM Setup Visual Studio environment
 echo [INFO] Setting up Visual Studio environment...
-call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1
+for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do (
+    set "VS_INSTALL_PATH=%%i"
+)
+
+if defined VS_INSTALL_PATH (
+    call "%VS_INSTALL_PATH%\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1
+    echo [INFO] Visual Studio environment set up successfully.
+) else (
+    echo [ERROR] Visual Studio not found. Please install Visual Studio.
+    exit /b 1
+)
 
 REM Compile resource file
 echo [INFO] Compiling resource file...
