@@ -71,17 +71,20 @@ echo [DEBUG] Tag pushed successfully
 echo [INFO] Building executable and installer locally...
 
 REM Download raylib if needed
-echo [INFO] Downloading raylib...
 if not exist raylib (
+    echo [INFO] raylib not found. Downloading...
     curl -L -o raylib.zip https://github.com/raysan5/raylib/releases/download/4.5.0/raylib-4.5.0_win64_msvc16.zip
     powershell -command "Expand-Archive -Path raylib.zip -DestinationPath . -Force"
     ren raylib-4.5.0_win64_msvc16 raylib
     del raylib.zip
+) else (
+    echo [INFO] raylib already exists. Skipping download.
 )
 
 REM Setup Visual Studio environment
 echo [INFO] Setting up Visual Studio environment...
-for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do (
+for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%
+Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do (
     set "VS_INSTALL_PATH=%%i"
 )
 
