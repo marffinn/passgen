@@ -136,6 +136,7 @@ echo [INFO] Manual steps:
 echo [INFO] 1. Go to: https://github.com/marffinn/passgen/releases
 echo [INFO] 2. Click "Create a new release"
 echo [INFO] 3. Choose tag: %NEW_TAG%
-echo [INFO] 4. Upload PasswordGenerator.exe
-echo [INFO] 5. Publish the release
+echo [INFO] 4. Upload PassGen.exe
+echo [INFO] 5. Add release notes and publish
+echo [INFO] Repository: https://github.com/marffinn/passgen
 pause
