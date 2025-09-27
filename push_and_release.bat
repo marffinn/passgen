@@ -51,7 +51,8 @@ if /i not "%CONFIRM%"=="y" (
 )
 
 REM Set up GitHub repository URL with token
-set "REPO_URL=https://marffinn:%GH_TOKEN%@github.com/marffinn/passgen.git"
+set "GITHUB_USERNAME=marffinn"
+set "REPO_URL=https://%GITHUB_USERNAME%:%GH_TOKEN%@github.com/marffinn/passgen.git"
 
 REM Check if tag exists and delete if necessary
 echo [INFO] Checking for existing tag %NEW_TAG%...
