@@ -110,6 +110,10 @@ if %errorlevel% neq 0 (
 )
 
 echo [SUCCESS] Release %NEW_TAG% created successfully!
-echo [INFO] GitHub Actions should trigger automatically to create the release
-echo [INFO] Check: https://github.com/marffinn/passgen/releases
+echo [INFO] GitHub Actions will create a draft release
+echo [INFO] Now build the executable locally:
+echo [INFO] 1. Run: compile.bat
+echo [INFO] 2. Go to: https://github.com/marffinn/passgen/releases
+echo [INFO] 3. Edit the draft release and upload PasswordGenerator.exe
+echo [INFO] 4. Publish the release
 pause

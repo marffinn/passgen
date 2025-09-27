@@ -1,4 +1,4 @@
-name: Build and Release
+name: Create Release
 
 on:
   push:
@@ -7,49 +7,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: windows-latest
+  release:
+    runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup MSVC
-      uses: microsoft/setup-msbuild@v1.3
-    
-    - name: Setup Raylib
-      run: |
-        Invoke-WebRequest -Uri "https://github.com/raysan5/raylib/releases/download/4.5.0/raylib-4.5.0_win64_msvc16.zip" -OutFile "raylib.zip"
-        Expand-Archive -Path "raylib.zip" -DestinationPath "raylib"
-        
-    - name: Embed Assets
-      run: |
-        # Create embedded assets header
-        echo "// Auto-generated embedded assets" > embedded_assets.h
-        echo "const unsigned char FONT_DATA[] = {" >> embedded_assets.h
-        $bytes = [System.IO.File]::ReadAllBytes("assets/fonts/FreePixel.ttf")
-        $hex = ($bytes | ForEach-Object { "0x{0:X2}" -f $_ }) -join ","
-        echo $hex >> embedded_assets.h
-        echo "};" >> embedded_assets.h
-        echo "const int FONT_SIZE = $($bytes.Length);" >> embedded_assets.h
-        
-        echo "const unsigned char ICON_DATA[] = {" >> embedded_assets.h
-        $iconBytes = [System.IO.File]::ReadAllBytes("assets/icons/password_64x64.png")
-        $iconHex = ($iconBytes | ForEach-Object { "0x{0:X2}" -f $_ }) -join ","
-        echo $iconHex >> embedded_assets.h
-        echo "};" >> embedded_assets.h
-        echo "const int ICON_SIZE = $($iconBytes.Length);" >> embedded_assets.h
-      shell: powershell
-    
-    - name: Compile
-      run: |
-        cl /EHsc /MD /I"raylib/raylib-4.5.0_win64_msvc16/include" main.cpp /link /LIBPATH:"raylib/raylib-4.5.0_win64_msvc16/lib" raylib.lib winmm.lib gdi32.lib opengl32.lib kernel32.lib shell32.lib user32.lib /SUBSYSTEM:WINDOWS /OUT:PasswordGenerator.exe
-      shell: cmd
-    
     - name: Create Release
-      if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v1
       with:
-        files: PasswordGenerator.exe
         name: Password Generator ${{ github.ref_name }}
         body: |
           ## Password Generator Release ${{ github.ref_name }}
@@ -61,13 +25,15 @@ jobs:
           - Portable single executable
           
           ### Usage
-          - Download `PasswordGenerator.exe`
+          - Download `PasswordGenerator.exe` from the assets below
           - Run directly - no installation required
           - All data stored locally in encrypted format
           
           ### System Requirements
           - Windows 10/11 (x64)
-        draft: false
+          
+          **Note:** Upload the executable manually to this release.
+        draft: true
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
