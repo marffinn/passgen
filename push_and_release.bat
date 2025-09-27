@@ -4,7 +4,6 @@ setlocal
 echo [INFO] Password Generator - Automated Release Process
 echo =====================================================
 
-REM Create bin directory
 if not exist bin mkdir bin
 
 REM Check if .env file exists
@@ -32,7 +31,7 @@ echo [DEBUG] Token loaded successfully (first 10 chars): %GH_TOKEN:~0,10%...
 
 REM Generate automatic version using random number
 set /a "BUILD_NUM=%RANDOM%"
-set "NEW_TAG=v1.0.%BUILD_NUM%"
+set NEW_TAG=v1.0.%BUILD_NUM%
 
 echo [INFO] Auto-generating version: %NEW_TAG%
 
@@ -74,14 +73,12 @@ echo [DEBUG] Tag pushed successfully
 echo [INFO] Building executable and installer locally...
 
 REM Download raylib if needed
+echo [INFO] Downloading raylib...
 if not exist raylib (
-    echo [INFO] raylib not found. Downloading...
     curl -L -o raylib.zip https://github.com/raysan5/raylib/releases/download/4.5.0/raylib-4.5.0_win64_msvc16.zip
     powershell -command "Expand-Archive -Path raylib.zip -DestinationPath . -Force"
     ren raylib-4.5.0_win64_msvc16 raylib
     del raylib.zip
-) else (
-    echo [INFO] raylib already exists. Skipping download.
 )
 
 REM Setup Visual Studio environment
@@ -147,9 +144,7 @@ REM Build NSIS installer
 echo [INFO] Building NSIS installer...
 where makensis >nul 2>&1
 if %errorlevel% equ 0 (
-    cd bin
-    makensis ..\installer.nsi
-    cd ..
+    makensis installer.nsi
     if exist "bin\PassGenInstaller.exe" (
         echo [SUCCESS] Installer built successfully: bin\PassGenInstaller.exe
     ) else (
@@ -187,5 +182,6 @@ echo [INFO] Cleaning up build artifacts...
 del bin\PassGen.exe 2>nul
 del bin\PassGenInstaller.exe 2>nul
 del embedded_assets.h 2>nul
+rmdir /s /q raylib 2>nul
 
 start https://github.com/marffinn/passgen/releases/tag/%NEW_TAG%
