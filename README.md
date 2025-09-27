@@ -29,30 +29,6 @@ A secure, portable password generator with encrypted storage built using C++ and
 - Individual password generation per service
 - Scrollable interface for unlimited entries
 
-## Building
-
-### Prerequisites
-- Windows 10/11
-- Visual Studio with MSVC compiler
-- PowerShell (for asset embedding)
-
-### Build Steps
-1. Clone the repository
-2. Place your assets in the `assets/` folder:
-   - `assets/fonts/FreePixel.ttf` - Custom pixel font
-   - `assets/icons/password_64x64.png` - Window icon (PNG)
-   - `assets/icons/password_32x32.ico` - Windows icon (ICO)
-3. Run the build script:
-   ```cmd
-   compile.bat
-   ```
-
-The build process automatically:
-- Embeds assets into the executable
-- Compiles with MSVC
-- Creates a portable executable
-- Cleans up temporary files
-
 ## Usage
 
 ### Password Generation
@@ -86,9 +62,6 @@ The build process automatically:
 ```
 passgen/
 ├── main.cpp              # Main application source
-├── compile.bat           # Build script
-├── embed_assets.bat      # Asset embedding script
-├── icon.rc              # Windows resource file
 ├── assets/
 │   ├── fonts/
 │   │   └── FreePixel.ttf # Custom pixel font
@@ -102,7 +75,6 @@ passgen/
 
 - **Language**: C++17
 - **Graphics**: Raylib 4.x
-- **Compiler**: MSVC (Visual Studio)
 - **Platform**: Windows (x64)
 - **Encryption**: XOR cipher with 0x7F key
 - **UI**: Custom pixel-perfect interface

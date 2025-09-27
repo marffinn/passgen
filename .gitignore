@@ -5,6 +5,7 @@
 *.ilk
 *.lib
 *.exp
+build/
 
 # Visual Studio files
 *.vcxproj
@@ -28,6 +29,8 @@ embedded_assets.h
 
 # Build scripts
 compile.bat
+embed_assets.bat
+icon.rc
 
 # Windows specific
 Thumbs.db
