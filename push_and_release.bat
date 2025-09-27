@@ -131,21 +131,7 @@ if exist "compile.bat" (
 )
 
 echo [INFO] Creating GitHub release with executable...
-gh release create %NEW_TAG% PassGen.exe --title "Password Generator %NEW_TAG%" --notes "## Password Generator Release %NEW_TAG%
-
-### Features
-- Secure password generation (4-50 characters)
-- Encrypted password library with XOR encryption
-- Clean pixel art UI with embedded assets
-- Portable single executable
-
-### Usage
-- Download PassGen.exe
-- Run directly - no installation required
-- All data stored locally in encrypted format
-
-### System Requirements
-- Windows 10/11 (x64)"
+gh release create %NEW_TAG% PassGen.exe --title "Password Generator %NEW_TAG%" --notes "Secure password generator with encrypted storage. Download PassGen.exe and run directly - no installation required. Windows 10/11 x64."
 if %errorlevel% neq 0 (
     echo [ERROR] Failed to create GitHub release
     echo [INFO] Manual steps:
@@ -160,4 +146,5 @@ if %errorlevel% neq 0 (
 echo [SUCCESS] Release %NEW_TAG% created successfully!
 echo [INFO] Release URL: https://github.com/marffinn/passgen/releases/tag/%NEW_TAG%
 echo [INFO] Executable uploaded: PassGen.exe
+start https://github.com/marffinn/passgen/releases/tag/%NEW_TAG%
 pause
