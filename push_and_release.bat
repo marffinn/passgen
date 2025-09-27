@@ -29,23 +29,21 @@ if not defined GH_TOKEN (
 
 echo [DEBUG] Token loaded successfully (first 10 chars): %GH_TOKEN:~0,10%...
 
-REM Get the latest tag (try local first, then remote)
-for /f "tokens=*" %%i in ('git describe --tags --abbrev=0 2^>nul') do set LATEST_TAG=%%i
+REM Fetch latest tags
+git fetch --tags >nul 2>&1
 
-REM If no local tags, try to fetch and get remote tags
-if "%LATEST_TAG%"=="" (
-    git fetch --tags >nul 2>&1
-    for /f "tokens=*" %%i in ('git tag -l "v*" 2^>nul ^| sort') do set LATEST_TAG=%%i
-)
+REM Get latest version tag
+set LATEST_TAG=
+for /f "delims=" %%i in ('git tag -l "v*.*.*" 2^>nul') do set LATEST_TAG=%%i
 
-REM If still no tags exist, start with v1.0.0
+REM If no tags exist, start with v1.0.0
 if "%LATEST_TAG%"=="" (
     set NEW_TAG=v1.0.0
     echo [INFO] No previous tags found. Starting with v1.0.0
 ) else (
     echo [INFO] Latest tag: %LATEST_TAG%
     
-    REM Extract version numbers (assuming format v1.2.3)
+    REM Simple increment: extract numbers and add 1 to patch
     set TAG_NO_V=%LATEST_TAG:~1%
     for /f "tokens=1,2,3 delims=." %%a in ("%TAG_NO_V%") do (
         set MAJOR=%%a
