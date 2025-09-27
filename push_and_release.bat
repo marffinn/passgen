@@ -31,7 +31,7 @@ if not defined GH_TOKEN (
 echo [DEBUG] Token loaded successfully (first 10 chars): %GH_TOKEN:~0,10%...
 
 REM Generate version based on date and time
-for /f "delims=" %%a in ('powershell -Command "Get-Date -Format \"yyyy.o-mm\""') do set "DATETIME=%%a"
+for /f "delims=" %%a in ('powershell -Command "Get-Date -Format \"yyMMdd-HHmm\""') do set "DATETIME=%%a"
 set "NEW_TAG=v1.0.%DATETIME%"
 
 echo [INFO] Auto-generating version: %NEW_TAG%
