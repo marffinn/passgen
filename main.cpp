@@ -303,7 +303,6 @@ int main() {
                     DrawTextEx(font12, password.c_str(), {150, yPos}, 12, 0, BLACK);
                 }
                 
-                // Actions column - auto-width COPY button
                 Vector2 copyTextSize = MeasureTextEx(font12, "COPY", 12, 0);
                 float copyBtnWidth = copyTextSize.x + 8.0f;
                 

@@ -45,10 +45,6 @@ git diff --cached --quiet
 if %errorlevel% neq 0 (
     git commit -m "Release %NEW_TAG%"
     git push %REPO_URL% master
-    if %errorlevel% neq 0 (
-        echo [ERROR] Failed to push changes
-        exit /b 1
-    )
 ) else (
     echo [INFO] No changes to commit, proceeding with tag creation
 )
