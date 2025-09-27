@@ -87,19 +87,19 @@ REM Compile resource file
 echo [INFO] Compiling resource file...
 rc icon.rc
 
-REM Copy assets to build directory
-echo [INFO] Copying assets...
-if exist "assets\fonts\FreePixel.ttf" (
-    copy "assets\fonts\FreePixel.ttf" . 
-    echo [DEBUG] Copied FreePixel.ttf
+REM Embed assets
+echo [INFO] Embedding assets...
+if exist "embed_assets.bat" (
+    call embed_assets.bat
+    if exist "embedded_assets.h" (
+        echo [DEBUG] Assets embedded successfully
+    ) else (
+        echo [ERROR] Asset embedding failed
+        exit /b 1
+    )
 ) else (
-    echo [ERROR] FreePixel.ttf not found in assets\fonts\
-)
-if exist "assets\icons\password_64x64.png" (
-    copy "assets\icons\password_64x64.png" . 
-    echo [DEBUG] Copied password_64x64.png
-) else (
-    echo [ERROR] password_64x64.png not found in assets\icons\
+    echo [ERROR] embed_assets.bat not found
+    exit /b 1
 )
 
 REM Compile executable
