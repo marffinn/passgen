@@ -29,10 +29,15 @@ if not defined GH_TOKEN (
 
 echo [DEBUG] Token loaded successfully (first 10 chars): %GH_TOKEN:~0,10%...
 
-REM Get the latest tag
-for /f "tokens=*" %%i in ('git describe --tags --abbrev=0 2^>nul') do set LATEST_TAG=%%i
+REM Get the latest tag from remote
+for /f "tokens=*" %%i in ('git ls-remote --tags origin ^| findstr "refs/tags/v" ^| sort /r ^| head -1 ^| for /f "tokens=2 delims=/" %%j in ("%%i") do echo %%j 2^>nul') do set LATEST_TAG=%%i
 
-REM If no tags exist, start with v1.0.0
+REM If no remote tags exist, check local tags
+if "%LATEST_TAG%"=="" (
+    for /f "tokens=*" %%i in ('git tag -l "v*" ^| sort /r ^| head -1 2^>nul') do set LATEST_TAG=%%i
+)
+
+REM If still no tags exist, start with v1.0.0
 if "%LATEST_TAG%"=="" (
     set NEW_TAG=v1.0.0
     echo [INFO] No previous tags found. Starting with v1.0.0
@@ -112,10 +117,10 @@ if %errorlevel% neq 0 (
 echo [INFO] Building executable locally...
 if exist "compile.bat" (
     call compile.bat
-    if exist "PasswordGenerator.exe" (
-        echo [SUCCESS] Executable built successfully!
+    if exist "PassGen.exe" (
+        echo [SUCCESS] Executable built successfully: PassGen.exe
     ) else (
-        echo [ERROR] Build failed - executable not found
+        echo [ERROR] Build failed - PassGen.exe not found
         pause
         exit /b 1
     )
@@ -126,7 +131,7 @@ if exist "compile.bat" (
 )
 
 echo [SUCCESS] Release %NEW_TAG% created successfully!
-echo [INFO] Executable: PasswordGenerator.exe
+echo [INFO] Executable: PassGen.exe
 echo [INFO] Manual steps:
 echo [INFO] 1. Go to: https://github.com/marffinn/passgen/releases
 echo [INFO] 2. Click "Create a new release"
