@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/raylib-populate"
+		},
+		{
+			"file" : "C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/43f9fec2a214b65bdf9d640a720744b4/raylib-populate.rule"
+		},
+		{
+			"file" : "C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/339f87ca46133d0e3b0a83b7cfcafc31/raylib-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/bd691c6f933ae46981da0be640a1a647/raylib-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/bd691c6f933ae46981da0be640a1a647/raylib-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/bd691c6f933ae46981da0be640a1a647/raylib-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/bd691c6f933ae46981da0be640a1a647/raylib-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/bd691c6f933ae46981da0be640a1a647/raylib-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/bd691c6f933ae46981da0be640a1a647/raylib-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/bd691c6f933ae46981da0be640a1a647/raylib-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/bd691c6f933ae46981da0be640a1a647/raylib-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"raylib-populate"
+		],
+		"name" : "raylib-populate"
+	}
+}

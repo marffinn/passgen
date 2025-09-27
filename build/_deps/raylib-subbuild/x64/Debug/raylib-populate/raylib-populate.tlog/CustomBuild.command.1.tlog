@@ -1,0 +1,152 @@
+^C:\USERS\MARFF\SOURCE\REPOS\PASSGEN\BUILD\_DEPS\RAYLIB-SUBBUILD\CMAKEFILES\BD691C6F933AE46981DA0BE640A1A647\RAYLIB-POPULATE-MKDIR.RULE
+setlocal
+C:\Tools\Cmake4110\bin\cmake.exe -Dcfgdir=/Debug -P C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/tmp/raylib-populate-mkdirs.cmake
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E touch C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/Debug/raylib-populate-mkdir
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MARFF\SOURCE\REPOS\PASSGEN\BUILD\_DEPS\RAYLIB-SUBBUILD\CMAKEFILES\BD691C6F933AE46981DA0BE640A1A647\RAYLIB-POPULATE-DOWNLOAD.RULE
+setlocal
+cd C:\Users\marff\source\repos\passgen\build\_deps
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/download-raylib-populate.cmake
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/verify-raylib-populate.cmake
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/extract-raylib-populate.cmake
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E touch C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/Debug/raylib-populate-download
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MARFF\SOURCE\REPOS\PASSGEN\BUILD\_DEPS\RAYLIB-SUBBUILD\CMAKEFILES\BD691C6F933AE46981DA0BE640A1A647\RAYLIB-POPULATE-UPDATE.RULE
+setlocal
+C:\Tools\Cmake4110\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E touch C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/Debug/raylib-populate-update
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MARFF\SOURCE\REPOS\PASSGEN\BUILD\_DEPS\RAYLIB-SUBBUILD\CMAKEFILES\BD691C6F933AE46981DA0BE640A1A647\RAYLIB-POPULATE-PATCH.RULE
+setlocal
+C:\Tools\Cmake4110\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E touch C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/Debug/raylib-populate-patch
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MARFF\SOURCE\REPOS\PASSGEN\BUILD\_DEPS\RAYLIB-SUBBUILD\CMAKEFILES\BD691C6F933AE46981DA0BE640A1A647\RAYLIB-POPULATE-CONFIGURE.RULE
+setlocal
+cd C:\Users\marff\source\repos\passgen\build\_deps\raylib-build
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E touch C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/Debug/raylib-populate-configure
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MARFF\SOURCE\REPOS\PASSGEN\BUILD\_DEPS\RAYLIB-SUBBUILD\CMAKEFILES\BD691C6F933AE46981DA0BE640A1A647\RAYLIB-POPULATE-BUILD.RULE
+setlocal
+cd C:\Users\marff\source\repos\passgen\build\_deps\raylib-build
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E touch C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/Debug/raylib-populate-build
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MARFF\SOURCE\REPOS\PASSGEN\BUILD\_DEPS\RAYLIB-SUBBUILD\CMAKEFILES\BD691C6F933AE46981DA0BE640A1A647\RAYLIB-POPULATE-INSTALL.RULE
+setlocal
+cd C:\Users\marff\source\repos\passgen\build\_deps\raylib-build
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E touch C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/Debug/raylib-populate-install
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MARFF\SOURCE\REPOS\PASSGEN\BUILD\_DEPS\RAYLIB-SUBBUILD\CMAKEFILES\BD691C6F933AE46981DA0BE640A1A647\RAYLIB-POPULATE-TEST.RULE
+setlocal
+cd C:\Users\marff\source\repos\passgen\build\_deps\raylib-build
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E touch C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/Debug/raylib-populate-test
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MARFF\SOURCE\REPOS\PASSGEN\BUILD\_DEPS\RAYLIB-SUBBUILD\CMAKEFILES\339F87CA46133D0E3B0A83B7CFCAFC31\RAYLIB-POPULATE-COMPLETE.RULE
+setlocal
+C:\Tools\Cmake4110\bin\cmake.exe -E make_directory C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/Debug
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E touch C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/Debug/raylib-populate-complete
+if %errorlevel% neq 0 goto :cmEnd
+C:\Tools\Cmake4110\bin\cmake.exe -E touch C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/Debug/raylib-populate-done
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MARFF\SOURCE\REPOS\PASSGEN\BUILD\_DEPS\RAYLIB-SUBBUILD\CMAKEFILES\43F9FEC2A214B65BDF9D640A720744B4\RAYLIB-POPULATE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MARFF\SOURCE\REPOS\PASSGEN\BUILD\_DEPS\RAYLIB-SUBBUILD\CMAKELISTS.TXT
+setlocal
+C:\Tools\Cmake4110\bin\cmake.exe -SC:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild -BC:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild --check-stamp-file C:/Users/marff/source/repos/passgen/build/_deps/raylib-subbuild/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
