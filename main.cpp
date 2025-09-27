@@ -1,8 +1,3 @@
-#define NOGDI
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <wincrypt.h>
-#undef NOGDI
 #include "raylib.h"
 #include <string>
 #include <random>
@@ -10,7 +5,6 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <iostream>
 
 class PasswordGenerator {
 private:
@@ -32,81 +26,18 @@ public:
     }
 };
 
-// AES-256 encryption using Windows CryptoAPI
-class AESCrypto {
-private:
-    HCRYPTPROV hProv;
-    HCRYPTKEY hKey;
-    std::string masterPassword;
-    
-public:
-    AESCrypto() : hProv(0), hKey(0), masterPassword("PassGenMaster2024!") {
-        if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) {
-            throw std::runtime_error("Failed to acquire crypto context");
-        }
-    }
-    
-    ~AESCrypto() {
-        if (hKey) CryptDestroyKey(hKey);
-        if (hProv) CryptReleaseContext(hProv, 0);
-    }
-    
-    bool createKey() {
-        HCRYPTHASH hHash;
-        if (!CryptCreateHash(hProv, CALG_SHA_256, 0, 0, &hHash)) return false;
-        
-        if (!CryptHashData(hHash, (BYTE*)masterPassword.c_str(), masterPassword.length(), 0)) {
-            CryptDestroyHash(hHash);
-            return false;
-        }
-        
-        if (!CryptDeriveKey(hProv, CALG_AES_256, hHash, 0, &hKey)) {
-            CryptDestroyHash(hHash);
-            return false;
-        }
-        
-        CryptDestroyHash(hHash);
-        return true;
-    }
-    
-    std::string encrypt(const std::string& data) {
-        if (!hKey && !createKey()) return "";
-        
-        DWORD dataLen = data.length();
-        DWORD bufferLen = dataLen + 16; // AES block size padding
-        std::vector<BYTE> buffer(bufferLen);
-        memcpy(buffer.data(), data.c_str(), dataLen);
-        
-        if (!CryptEncrypt(hKey, 0, TRUE, 0, buffer.data(), &dataLen, bufferLen)) {
-            return "";
-        }
-        
-        return std::string((char*)buffer.data(), dataLen);
-    }
-    
-    std::string decrypt(const std::string& data) {
-        if (!hKey && !createKey()) return "";
-        
-        DWORD dataLen = data.length();
-        std::vector<BYTE> buffer(dataLen);
-        memcpy(buffer.data(), data.c_str(), dataLen);
-        
-        if (!CryptDecrypt(hKey, 0, TRUE, 0, buffer.data(), &dataLen)) {
-            return "";
-        }
-        
-        return std::string((char*)buffer.data(), dataLen);
-    }
-};
-
-static AESCrypto crypto;
-
+// Simple XOR encryption
 std::string encrypt(const std::string& data) {
-    return crypto.encrypt(data);
+    std::string result = data;
+    const char key = 0x7F;
+    for (size_t i = 0; i < result.length(); i++) {
+        result[i] ^= key;
+    }
+    return result;
 }
 
 std::string decrypt(const std::string& data) {
-    return crypto.decrypt(data);
+    return encrypt(data); // XOR is symmetric
 }
 
 int main() {
@@ -130,7 +61,7 @@ int main() {
     SetTextureFilter(font10.texture, TEXTURE_FILTER_POINT);
     
     // Set window icon from external file
-    Image iconImage = ::LoadImage("password_64x64.png");
+    Image iconImage = LoadImage("password_64x64.png");
     if (iconImage.data != NULL) {
         SetWindowIcon(iconImage);
         UnloadImage(iconImage);
@@ -274,7 +205,7 @@ int main() {
             }
         } else {
             // Library view
-            DrawTextEx(font16, "Password Library (AES-256)", {centerX - 120.0f, 145}, 16, 0, DARKBLUE);
+            DrawTextEx(font16, "Password Library (Encrypted)", {centerX - 120.0f, 145}, 16, 0, DARKBLUE);
             
             Rectangle libraryArea = {15.0f, 170.0f, (float)(screenWidth - 30), 180.0f};
             DrawRectangleRec(libraryArea, {245, 245, 245, 255});
