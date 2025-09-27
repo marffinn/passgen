@@ -30,9 +30,9 @@ if not defined GH_TOKEN (
 
 echo [DEBUG] Token loaded successfully (first 10 chars): %GH_TOKEN:~0,10%...
 
-REM Generate version based on date and time
-for /f "delims=" %%a in ('powershell -Command "Get-Date -Format \"yyMMdd-HHmm\""') do set "DATETIME=%%a"
-set "NEW_TAG=v1.0.%DATETIME%"
+REM Generate automatic version using random number
+set /a "BUILD_NUM=%RANDOM%"
+set "NEW_TAG=v1.0.%BUILD_NUM%"
 
 echo [INFO] Auto-generating version: %NEW_TAG%
 
@@ -86,19 +86,12 @@ if not exist raylib (
 
 REM Setup Visual Studio environment
 echo [INFO] Setting up Visual Studio environment...
-for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%
-Microsoft Visual Studio
-Installer
-vswhere.exe" -latest -property installationPath`) do (
+for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do (
     set "VS_INSTALL_PATH=%%i"
 )
 
 if defined VS_INSTALL_PATH (
-    call "%VS_INSTALL_PATH%
-VC
-Auxiliary
-Build
-vcvars64.bat" >nul 2>&1
+    call "%VS_INSTALL_PATH%\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1
     echo [INFO] Visual Studio environment set up successfully.
 ) else (
     echo [ERROR] Visual Studio not found. Please install Visual Studio.
