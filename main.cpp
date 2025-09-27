@@ -1,3 +1,8 @@
+#define NOGDI
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <wincrypt.h>
+#undef NOGDI
 #include "raylib.h"
 #include <string>
 #include <random>
@@ -5,8 +10,6 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <windows.h>
-#include <wincrypt.h>
 #include <iostream>
 
 class PasswordGenerator {
@@ -127,7 +130,7 @@ int main() {
     SetTextureFilter(font10.texture, TEXTURE_FILTER_POINT);
     
     // Set window icon from external file
-    Image iconImage = LoadImage("password_64x64.png");
+    Image iconImage = ::LoadImage("password_64x64.png");
     if (iconImage.data != NULL) {
         SetWindowIcon(iconImage);
         UnloadImage(iconImage);
