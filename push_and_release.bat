@@ -8,7 +8,6 @@ REM Check if .env file exists
 if not exist ".env" (
     echo [ERROR] .env file not found
     echo [INFO] Create .env file with: GITHUB_TOKEN=your_token_here
-    pause
     exit /b 1
 )
 
@@ -23,17 +22,14 @@ if not defined GH_TOKEN (
     echo [ERROR] GITHUB_TOKEN not found in .env file
     echo [DEBUG] .env file contents:
     type .env
-    pause
     exit /b 1
 )
 
 echo [DEBUG] Token loaded successfully (first 10 chars): %GH_TOKEN:~0,10%...
 
-REM Generate automatic version using timestamp
-for /f "tokens=1-3 delims=/" %%a in ('%date%') do set TODAY=%%c%%a%%b
-for /f "tokens=1-2 delims=:" %%a in ('%time%') do set NOW=%%a%%b
-set VERSION=%TODAY:~2,2%%TODAY:~5,2%%TODAY:~8,2%.%NOW:~0,2%%NOW:~3,2%
-set NEW_TAG=v1.0.%VERSION%
+REM Generate automatic version using random number
+set /a "BUILD_NUM=%RANDOM%"
+set NEW_TAG=v1.0.%BUILD_NUM%
 
 echo [INFO] Auto-generating version: %NEW_TAG%
 
@@ -49,7 +45,6 @@ git commit -m "Release %NEW_TAG%"
 git push %REPO_URL% master
 if %errorlevel% neq 0 (
     echo [ERROR] Failed to push changes
-    pause
     exit /b 1
 )
 
@@ -57,7 +52,6 @@ echo [INFO] Creating new tag %NEW_TAG%...
 git tag %NEW_TAG%
 if %errorlevel% neq 0 (
     echo [ERROR] Failed to create tag (may already exist locally)
-    pause
     exit /b 1
 )
 
@@ -65,7 +59,6 @@ echo [INFO] Pushing tag to GitHub...
 git push %REPO_URL% %NEW_TAG%
 if %errorlevel% neq 0 (
     echo [ERROR] Failed to push tag
-    pause
     exit /b 1
 )
 
@@ -76,12 +69,10 @@ if exist "compile.bat" (
         echo [SUCCESS] Executable built successfully: PassGen.exe
     ) else (
         echo [ERROR] Build failed - PassGen.exe not found
-        pause
         exit /b 1
     )
 ) else (
     echo [ERROR] compile.bat not found
-    pause
     exit /b 1
 )
 
@@ -94,7 +85,6 @@ if %errorlevel% neq 0 (
     echo [INFO] 2. Click "Create a new release"
     echo [INFO] 3. Choose tag: %NEW_TAG%
     echo [INFO] 4. Upload PassGen.exe
-    pause
     exit /b 1
 )
 
@@ -102,4 +92,3 @@ echo [SUCCESS] Release %NEW_TAG% created successfully!
 echo [INFO] Release URL: https://github.com/marffinn/passgen/releases/tag/%NEW_TAG%
 echo [INFO] Executable uploaded: PassGen.exe
 start https://github.com/marffinn/passgen/releases/tag/%NEW_TAG%
-pause
