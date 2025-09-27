@@ -31,14 +31,8 @@ if not defined GH_TOKEN (
 echo [DEBUG] Token loaded successfully (first 10 chars): %GH_TOKEN:~0,10%...
 
 REM Generate version based on date and time
-for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /format:list') do set "DATETIME=%%I"
-set "YYYY=%DATETIME:~0,4%"
-set "MM=%DATETIME:~4,2%"
-set "DD=%DATETIME:~6,2%"
-set "HH=%DATETIME:~8,2%"
-set "MIN=%DATETIME:~10,2%"
-set "SS=%DATETIME:~12,2%"
-set "NEW_TAG=v1.0.%YYYY%%MM%%DD%-%HH%%MIN%%SS%"
+for /f "delims=" %%a in ('powershell -Command "Get-Date -Format \"yyyyMMdd-HHmmss\""') do set "DATETIME=%%a"
+set "NEW_TAG=v1.0.%DATETIME%"
 
 echo [INFO] Auto-generating version: %NEW_TAG%
 
