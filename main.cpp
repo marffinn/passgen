@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "embedded_assets.h"
 #include <string>
 #include <random>
 #include <algorithm>
@@ -139,37 +140,24 @@ int main() {
     InitWindow(screenWidth, screenHeight, "Password Generator");
     SetTargetFPS(60);
     
-    // Load FreePixel fonts from external files
-    Font font20, font16, font14, font12, font10;
+    // Load FreePixel fonts from embedded data
+    Font font20 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 20, 0, 95);
+    Font font16 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 16, 0, 95);
+    Font font14 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 14, 0, 95);
+    Font font12 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 12, 0, 95);
+    Font font10 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 10, 0, 95);
     
-    if (FileExists("FreePixel.ttf")) {
-        font20 = LoadFontEx("FreePixel.ttf", 20, 0, 95);
-        font16 = LoadFontEx("FreePixel.ttf", 16, 0, 95);
-        font14 = LoadFontEx("FreePixel.ttf", 14, 0, 95);
-        font12 = LoadFontEx("FreePixel.ttf", 12, 0, 95);
-        font10 = LoadFontEx("FreePixel.ttf", 10, 0, 95);
-        
-        SetTextureFilter(font20.texture, TEXTURE_FILTER_POINT);
-        SetTextureFilter(font16.texture, TEXTURE_FILTER_POINT);
-        SetTextureFilter(font14.texture, TEXTURE_FILTER_POINT);
-        SetTextureFilter(font12.texture, TEXTURE_FILTER_POINT);
-        SetTextureFilter(font10.texture, TEXTURE_FILTER_POINT);
-    } else {
-        // Fallback to default font if FreePixel.ttf not found
-        font20 = GetFontDefault();
-        font16 = GetFontDefault();
-        font14 = GetFontDefault();
-        font12 = GetFontDefault();
-        font10 = GetFontDefault();
-    }
+    SetTextureFilter(font20.texture, TEXTURE_FILTER_POINT);
+    SetTextureFilter(font16.texture, TEXTURE_FILTER_POINT);
+    SetTextureFilter(font14.texture, TEXTURE_FILTER_POINT);
+    SetTextureFilter(font12.texture, TEXTURE_FILTER_POINT);
+    SetTextureFilter(font10.texture, TEXTURE_FILTER_POINT);
     
-    // Set window icon from external file
-    if (FileExists("password_64x64.png")) {
-        Image iconImage = LoadImage("password_64x64.png");
-        if (iconImage.data != NULL) {
-            SetWindowIcon(iconImage);
-            UnloadImage(iconImage);
-        }
+    // Set window icon from embedded data
+    Image iconImage = LoadImageFromMemory(".png", ICON_DATA, ICON_SIZE);
+    if (iconImage.data != NULL) {
+        SetWindowIcon(iconImage);
+        UnloadImage(iconImage);
     }
     
     PasswordGenerator passGen;

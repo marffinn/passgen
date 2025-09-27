@@ -109,6 +109,7 @@ cl /EHsc /MD /I raylib\include main.cpp icon.res raylib\lib\raylib.lib user32.li
 REM Clean up build artifacts
 del main.obj 2>nul
 del icon.res 2>nul
+del embedded_assets.h 2>nul
 
 if exist "PassGen.exe" (
     echo [SUCCESS] Executable built successfully: PassGen.exe
