@@ -166,9 +166,9 @@ echo [INFO] Release URL: https://github.com/marffinn/passgen/releases/tag/%NEW_T
 echo [INFO] Executable uploaded: PassGen.exe
 
 echo [INFO] Cleaning up build artifacts...
-del PassGen.exe 2>nul
-del PassGenInstaller.exe 2>nul
-del embedded_assets.h 2>nul
-rmdir /s /q raylib 2>nul
+REM del PassGen.exe 2>nul
+REM del PassGenInstaller.exe 2>nul
+REM del embedded_assets.h 2>nul
+REM rmdir /s /q raylib 2>nul
 
 start https://github.com/marffinn/passgen/releases/tag/%NEW_TAG%
