@@ -47,18 +47,18 @@ int main() {
     InitWindow(screenWidth, screenHeight, "Password Generator");
     SetTargetFPS(60);
 
-    // Load FreePixel fonts from embedded data
+    // Load FreePixel fonts from embedded data - increased sizes for better readability
+    Font font24 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 24, 0, 95);
     Font font20 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 20, 0, 95);
+    Font font18 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 18, 0, 95);
     Font font16 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 16, 0, 95);
     Font font14 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 14, 0, 95);
-    Font font12 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 12, 0, 95);
-    Font font10 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 10, 0, 95);
 
+    SetTextureFilter(font24.texture, TEXTURE_FILTER_POINT);
     SetTextureFilter(font20.texture, TEXTURE_FILTER_POINT);
+    SetTextureFilter(font18.texture, TEXTURE_FILTER_POINT);
     SetTextureFilter(font16.texture, TEXTURE_FILTER_POINT);
     SetTextureFilter(font14.texture, TEXTURE_FILTER_POINT);
-    SetTextureFilter(font12.texture, TEXTURE_FILTER_POINT);
-    SetTextureFilter(font10.texture, TEXTURE_FILTER_POINT);
 
     // Set window icon from embedded data
     Image iconImage = LoadImageFromMemory(".png", ICON_DATA, ICON_SIZE);
@@ -131,30 +131,30 @@ int main() {
         if (copiedTimer == 0) copied = false;
 
         BeginDrawing();
-        ClearBackground(DARKGRAY);
+        ClearBackground(BLACK); // Dark theme background
 
         // Top bar with title (centered)
-        DrawRectangle(0, 0, screenWidth, 35, BLUE); // Changed from DARKBLUE
-        Vector2 titleSize = MeasureTextEx(font16, "Password Generator", 16, 0);
-        DrawTextEx(font16, "Password Generator", {centerX - titleSize.x/2, 10}, 16, 0, WHITE); // Text on colored background can remain white
+        DrawRectangle(0, 0, screenWidth, 40, BLUE); 
+        Vector2 titleSize = MeasureTextEx(font20, "Password Generator", 20, 0);
+        DrawTextEx(font20, "Password Generator", {centerX - titleSize.x/2, 10}, 20, 0, WHITE);
 
         // Password length with slider (centered)
         const char* lengthText = TextFormat("Length: %d", passwordLength);
-        Vector2 lengthSize = MeasureTextEx(font16, lengthText, 16, 0);
-        DrawTextEx(font16, lengthText, {centerX - lengthSize.x/2, 45}, 16, 0, WHITE);
+        Vector2 lengthSize = MeasureTextEx(font18, lengthText, 18, 0);
+        DrawTextEx(font18, lengthText, {centerX - lengthSize.x/2, 50}, 18, 0, WHITE);
 
-        DrawRectangleRec(sliderBar, GRAY); // Changed from LIGHTGRAY
-        DrawRectangleRec(sliderKnob, BLUE); // Changed from DARKBLUE
-        DrawTextEx(font16, "4", {centerX - 140.0f, 65.0f}, 16, 0, DARKGRAY); // Changed from GRAY
-        DrawTextEx(font16, "50", {centerX + 130.0f, 65.0f}, 16, 0, DARKGRAY); // Changed from GRAY
+        DrawRectangleRec(sliderBar, DARKGRAY);
+        DrawRectangleRec(sliderKnob, LIME);
+        DrawTextEx(font16, "4", {centerX - 140.0f, 65.0f}, 16, 0, LIGHTGRAY);
+        DrawTextEx(font16, "50", {centerX + 130.0f, 65.0f}, 16, 0, LIGHTGRAY);
 
         // Generate button area (auto-width, centered)
-        Vector2 genSize = MeasureTextEx(font16, "Generate (SPACE)", 16, 0);
+        Vector2 genSize = MeasureTextEx(font18, "Generate (SPACE)", 18, 0);
         float buttonWidth = genSize.x + 20.0f; // Add padding
-        Rectangle genButton = {centerX - buttonWidth/2.0f, 95.0f, buttonWidth, 30.0f};
-        DrawRectangleRec(genButton, BLUE); // Changed from DARKBLUE
+        Rectangle genButton = {centerX - buttonWidth/2.0f, 95.0f, buttonWidth, 35.0f};
+        DrawRectangleRec(genButton, LIME);
         float genButtonCenterY = genButton.y + genButton.height/2.0f - genSize.y/2.0f;
-        DrawTextEx(font16, "Generate (SPACE)", {centerX - genSize.x/2, genButtonCenterY}, 16, 0, WHITE);
+        DrawTextEx(font18, "Generate (SPACE)", {centerX - genSize.x/2, genButtonCenterY}, 18, 0, BLACK);
 
         if (CheckCollisionPointRec(GetMousePosition(), genButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             password = passGen.generate(passwordLength);
@@ -163,35 +163,35 @@ int main() {
 
         if (!showLibrary) {
             // Main generator view
-            Rectangle passBox = {15.0f, 140.0f, (float)(screenWidth - 30), 45.0f};
-            DrawRectangleRec(passBox, LIGHTGRAY); // Changed from WHITE
-            DrawRectangleLinesEx(passBox, 1, GRAY); // Changed from DARKGRAY
+            Rectangle passBox = {15.0f, 140.0f, (float)(screenWidth - 30), 50.0f};
+            DrawRectangleRec(passBox, DARKGRAY);
+            DrawRectangleLinesEx(passBox, 2, BLUE);
 
             if (!password.empty()) {
                 const char* passText = password.c_str();
-                Vector2 textSize = MeasureTextEx(font16, passText, 16, 0);
+                Vector2 textSize = MeasureTextEx(font18, passText, 18, 0);
                 if (textSize.x > screenWidth - 50) {
-                    DrawTextEx(font16, passText, {centerX - textSize.x/2.0f, 150.0f}, 12, 0, LIME);
-                } else {
                     DrawTextEx(font16, passText, {centerX - textSize.x/2.0f, 155.0f}, 16, 0, LIME);
+                } else {
+                    DrawTextEx(font18, passText, {centerX - textSize.x/2.0f, 155.0f}, 18, 0, LIME);
                 }
             } else {
-                DrawTextEx(font16, "Generated password appears here", {centerX - 140.0f, 155.0f}, 16, 0, DARKGRAY); // Changed from GRAY
+                DrawTextEx(font16, "Generated password appears here", {centerX - 140.0f, 155.0f}, 16, 0, LIGHTGRAY);
             }
 
             // Copy and Library buttons
-            Rectangle copyButton = {15.0f, 200.0f, 200.0f, 30.0f};
-            Rectangle libraryButton = {235.0f, 200.0f, 200.0f, 30.0f};
+            Rectangle copyButton = {15.0f, 205.0f, 200.0f, 35.0f};
+            Rectangle libraryButton = {235.0f, 205.0f, 200.0f, 35.0f};
 
-            DrawRectangleRec(copyButton, GREEN); // Changed from DARKGREEN
-            DrawRectangleRec(libraryButton, BLUE); // Changed from DARKBLUE
+            DrawRectangleRec(copyButton, GREEN);
+            DrawRectangleRec(libraryButton, BLUE);
 
             const char* copyText = copied ? "Copied to clipboard!" : "COPY";
-            Vector2 copySize = MeasureTextEx(font16, copyText, 16, 0);
-            Vector2 libSize = MeasureTextEx(font16, "LIBRARY", 16, 0);
+            Vector2 copySize = MeasureTextEx(font18, copyText, 18, 0);
+            Vector2 libSize = MeasureTextEx(font18, "LIBRARY", 18, 0);
 
-            DrawTextEx(font16, copyText, {115.0f - copySize.x/2.0f, 210.0f}, 16, 0, WHITE);
-            DrawTextEx(font16, "LIBRARY", {335.0f - libSize.x/2.0f, 210.0f}, 16, 0, WHITE);
+            DrawTextEx(font18, copyText, {115.0f - copySize.x/2.0f, 213.0f}, 18, 0, WHITE);
+            DrawTextEx(font18, "LIBRARY", {335.0f - libSize.x/2.0f, 213.0f}, 18, 0, WHITE);
 
             if (CheckCollisionPointRec(GetMousePosition(), copyButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !password.empty()) {
                 SetClipboardText(password.c_str());
@@ -205,19 +205,19 @@ int main() {
             }
         } else {
             // Library view
-            DrawTextEx(font16, "Password Library (Encrypted)", {centerX - 120.0f, 145}, 16, 0, BLUE); // Changed from DARKBLUE
+            DrawTextEx(font18, "Password Library (Encrypted)", {centerX - 140.0f, 145}, 18, 0, LIME);
 
             Rectangle libraryArea = {15.0f, 170.0f, (float)(screenWidth - 30), 180.0f};
-            DrawRectangleRec(libraryArea, {220, 220, 220, 255}); // A light gray
-            DrawRectangleLinesEx(libraryArea, 1, GRAY); // Changed from DARKGRAY
+            DrawRectangleRec(libraryArea, DARKGRAY);
+            DrawRectangleLinesEx(libraryArea, 2, BLUE);
 
             // Table headers (always visible)
-            DrawTextEx(font12, "Service Name", {25, 175}, 12, 0, BLUE); // Changed from DARKBLUE
-            DrawTextEx(font12, "Password", {150, 175}, 12, 0, BLUE); // Changed from DARKBLUE
-            DrawTextEx(font12, "Actions", {320, 175}, 12, 0, BLUE); // Changed from DARKBLUE
+            DrawTextEx(font16, "Service Name", {25, 175}, 16, 0, LIME);
+            DrawTextEx(font16, "Password", {150, 175}, 16, 0, LIME);
+            DrawTextEx(font16, "Actions", {320, 175}, 16, 0, LIME);
 
             // Header separator line
-            DrawLine(20, 190, 415, 190, GRAY); // Changed from DARKGRAY
+            DrawLine(20, 190, 415, 190, BLUE);
 
             // Enable scissor test for clipping content only
             BeginScissorMode(15, 195, screenWidth - 35, 155);
@@ -240,10 +240,10 @@ int main() {
 
                 if (editingIndex == itemIndex) {
                     // Edit mode for service name
-                    Rectangle editBox = {25.0f, yPos - 2.0f, 120.0f, 16.0f};
+                    Rectangle editBox = {25.0f, yPos - 2.0f, 120.0f, 18.0f};
                     DrawRectangleRec(editBox, WHITE);
-                    DrawRectangleLinesEx(editBox, 1, BLUE); // Changed from DARKBLUE
-                    DrawTextEx(font12, editBuffer, {30, yPos}, 12, 0, BLACK);
+                    DrawRectangleLinesEx(editBox, 1, BLUE);
+                    DrawTextEx(font14, editBuffer, {30, yPos}, 14, 0, BLACK);
 
                     int key = GetCharPressed();
                     while (key > 0) {
@@ -283,10 +283,10 @@ int main() {
                     // Show password in second column during edit
                     std::string password = libraryPasswords[itemIndex];
                     if (password.length() > 15) password = password.substr(0, 15) + "...";
-                    DrawTextEx(font12, password.c_str(), {150, yPos}, 12, 0, WHITE);
+                    DrawTextEx(font14, password.c_str(), {150, yPos}, 14, 0, LIME);
                 } else {
                     // Display mode - Service name column
-                    Rectangle nameArea = {25.0f, yPos - 2.0f, 120.0f, 16.0f};
+                    Rectangle nameArea = {25.0f, yPos - 2.0f, 120.0f, 18.0f};
                     if (CheckCollisionPointRec(GetMousePosition(), nameArea) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                         editingIndex = itemIndex;
                         strcpy(editBuffer, serviceNames[itemIndex].c_str());
@@ -294,28 +294,28 @@ int main() {
 
                     std::string serviceName = serviceNames[itemIndex];
                     if (serviceName.length() > 12) serviceName = serviceName.substr(0, 12) + "...";
-                    DrawTextEx(font12, serviceName.c_str(), {25, yPos}, 12, 0, WHITE);
+                    DrawTextEx(font14, serviceName.c_str(), {25, yPos}, 14, 0, WHITE);
 
                     // Password column
                     std::string password = libraryPasswords[itemIndex];
                     if (password.length() > 15) password = password.substr(0, 15) + "...";
-                    DrawTextEx(font12, password.c_str(), {150, yPos}, 12, 0, WHITE);
+                    DrawTextEx(font14, password.c_str(), {150, yPos}, 14, 0, LIME);
                 }
 
-                Vector2 copyTextSize = MeasureTextEx(font12, "COPY", 12, 0);
-                float copyBtnWidth = copyTextSize.x + 8.0f;
+                Vector2 copyTextSize = MeasureTextEx(font14, "COPY", 14, 0);
+                float copyBtnWidth = copyTextSize.x + 10.0f;
 
-                Rectangle copyBtn = {280.0f, yPos - 2.0f, copyBtnWidth, 14.0f};
-                Rectangle genBtn = {285.0f + copyBtnWidth, yPos - 2.0f, 30.0f, 14.0f};
-                Rectangle delBtn = {320.0f + copyBtnWidth, yPos - 2.0f, 30.0f, 14.0f};
+                Rectangle copyBtn = {280.0f, yPos - 2.0f, copyBtnWidth, 18.0f};
+                Rectangle genBtn = {285.0f + copyBtnWidth, yPos - 2.0f, 35.0f, 18.0f};
+                Rectangle delBtn = {325.0f + copyBtnWidth, yPos - 2.0f, 35.0f, 18.0f};
 
-                DrawRectangleRec(copyBtn, BLUE); // Changed from DARKBLUE
-                DrawRectangleRec(genBtn, GREEN); // Changed from DARKGREEN
-                DrawRectangleRec(delBtn, RED); // Changed from MAROON
+                DrawRectangleRec(copyBtn, BLUE);
+                DrawRectangleRec(genBtn, GREEN);
+                DrawRectangleRec(delBtn, RED);
 
-                DrawTextEx(font12, "COPY", {284.0f, yPos}, 12, 0, WHITE);
-                DrawTextEx(font12, "GEN", {290.0f + copyBtnWidth, yPos}, 12, 0, WHITE);
-                DrawTextEx(font12, "DEL", {325.0f + copyBtnWidth, yPos}, 12, 0, WHITE);
+                DrawTextEx(font14, "COPY", {284.0f, yPos}, 14, 0, WHITE);
+                DrawTextEx(font14, "GEN", {290.0f + copyBtnWidth, yPos}, 14, 0, WHITE);
+                DrawTextEx(font14, "DEL", {330.0f + copyBtnWidth, yPos}, 14, 0, WHITE);
 
                 if (CheckCollisionPointRec(GetMousePosition(), copyBtn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     SetClipboardText(libraryPasswords[itemIndex].c_str());
@@ -357,7 +357,7 @@ int main() {
 
                 // Row separator line
                 if (i < std::min(totalItems - scrollOffset, maxVisible) - 1) {
-                    DrawLine(20, yPos + 14, 410, yPos + 14, SKYBLUE); // Changed from BLUE
+                    DrawLine(20, yPos + 16, 410, yPos + 16, BLUE);
                 }
             }
 
@@ -366,25 +366,25 @@ int main() {
             // Scrollbar (inside library area)
             if (totalItems > maxVisible) {
                 float scrollBarHeight = (maxVisible - 1) * 20.0f + 14.0f; // Height based on actual content area
-                Rectangle scrollBar = {412.0f, 195.0f, 3.0f, scrollBarHeight};
-                DrawRectangleRec(scrollBar, LIGHTGRAY);
+                Rectangle scrollBar = {412.0f, 195.0f, 5.0f, scrollBarHeight};
+                DrawRectangleRec(scrollBar, DARKGRAY);
 
                 float thumbHeight = (float)maxVisible / totalItems * scrollBarHeight;
                 if (thumbHeight < 10.0f) thumbHeight = 10.0f; // Minimum thumb size
                 float thumbY = 195.0f + ((float)scrollOffset / (totalItems - maxVisible)) * (scrollBarHeight - thumbHeight);
-                Rectangle scrollThumb = {412.0f, thumbY, 3.0f, thumbHeight};
-                DrawRectangleRec(scrollThumb, DARKGRAY);
+                Rectangle scrollThumb = {412.0f, thumbY, 5.0f, thumbHeight};
+                DrawRectangleRec(scrollThumb, LIME);
             }
 
             // Back button (left side)
-            Rectangle backButton = {15.0f, 360.0f, 80.0f, 25.0f};
-            DrawRectangleRec(backButton, LIGHTGRAY); // Changed from GRAY
-            DrawTextEx(font12, "BACK", {40.0f, 368.0f}, 12, 0, BLACK);
+            Rectangle backButton = {15.0f, 360.0f, 80.0f, 30.0f};
+            DrawRectangleRec(backButton, DARKGRAY);
+            DrawTextEx(font16, "BACK", {35.0f, 367.0f}, 16, 0, WHITE);
 
             // Add new entry button (right side)
-            Rectangle addButton = {355.0f, 360.0f, 80.0f, 25.0f};
-            DrawRectangleRec(addButton, BLUE); // Changed from DARKBLUE
-            DrawTextEx(font12, "ADD NEW", {365.0f, 368.0f}, 12, 0, WHITE);
+            Rectangle addButton = {355.0f, 360.0f, 80.0f, 30.0f};
+            DrawRectangleRec(addButton, BLUE);
+            DrawTextEx(font16, "ADD NEW", {360.0f, 367.0f}, 16, 0, WHITE);
 
             if (CheckCollisionPointRec(GetMousePosition(), addButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 serviceNames.push_back("new_service");
@@ -413,11 +413,11 @@ int main() {
         EndDrawing();
     }
 
+    UnloadFont(font24);
     UnloadFont(font20);
+    UnloadFont(font18);
     UnloadFont(font16);
     UnloadFont(font14);
-    UnloadFont(font12);
-    UnloadFont(font10);
     CloseWindow();
     return 0;
 }
