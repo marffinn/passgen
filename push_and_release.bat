@@ -87,29 +87,33 @@ REM Compile resource file
 echo [INFO] Compiling resource file...
 rc icon.rc
 
-REM Embed assets
-echo [INFO] Embedding assets...
-echo // Auto-generated embedded assets > embedded_assets.h
-echo. >> embedded_assets.h
+REM Embed assets only if the file doesn't exist
+if not exist "embedded_assets.h" (
+    echo [INFO] Embedding assets...
+    echo // Auto-generated embedded assets > embedded_assets.h
+    echo. >> embedded_assets.h
 
-REM Embed font
-echo const unsigned char FONT_DATA[] = { >> embedded_assets.h
-powershell -Command "$bytes = [System.IO.File]::ReadAllBytes('assets/fonts/FreePixel.ttf'); for($i=0; $i -lt $bytes.Length; $i++) { if($i -gt 0) { Write-Host -NoNewline ',' }; Write-Host -NoNewline ('0x{0:X2}' -f $bytes[$i]) }" >> embedded_assets.h
-echo. >> embedded_assets.h
-echo }; >> embedded_assets.h
+    REM Embed font
+    echo const unsigned char FONT_DATA[] = { >> embedded_assets.h
+    powershell -Command "$bytes = [System.IO.File]::ReadAllBytes('assets/fonts/FreePixel.ttf'); for($i=0; $i -lt $bytes.Length; $i++) { if($i -gt 0) { Write-Host -NoNewline ',' }; Write-Host -NoNewline ('0x{0:X2}' -f $bytes[$i]) }" >> embedded_assets.h
+    echo. >> embedded_assets.h
+    echo }; >> embedded_assets.h
 
-powershell -Command "Write-Host ('const int FONT_SIZE = {0};' -f [System.IO.File]::ReadAllBytes('assets/fonts/FreePixel.ttf').Length)" >> embedded_assets.h
-echo. >> embedded_assets.h
+    powershell -Command "Write-Host ('const int FONT_SIZE = {0};' -f [System.IO.File]::ReadAllBytes('assets/fonts/FreePixel.ttf').Length)" >> embedded_assets.h
+    echo. >> embedded_assets.h
 
-REM Embed icon
-echo const unsigned char ICON_DATA[] = { >> embedded_assets.h
-powershell -Command "$bytes = [System.IO.File]::ReadAllBytes('assets/icons/password_64x64.png'); for($i=0; $i -lt $bytes.Length; $i++) { if($i -gt 0) { Write-Host -NoNewline ',' }; Write-Host -NoNewline ('0x{0:X2}' -f $bytes[$i]) }" >> embedded_assets.h
-echo. >> embedded_assets.h
-echo }; >> embedded_assets.h
+    REM Embed icon
+    echo const unsigned char ICON_DATA[] = { >> embedded_assets.h
+    powershell -Command "$bytes = [System.IO.File]::ReadAllBytes('assets/icons/password_64x64.png'); for($i=0; $i -lt $bytes.Length; $i++) { if($i -gt 0) { Write-Host -NoNewline ',' }; Write-Host -NoNewline ('0x{0:X2}' -f $bytes[$i]) }" >> embedded_assets.h
+    echo. >> embedded_assets.h
+    echo }; >> embedded_assets.h
 
-powershell -Command "Write-Host ('const int ICON_SIZE = {0};' -f [System.IO.File]::ReadAllBytes('assets/icons/password_64x64.png').Length)" >> embedded_assets.h
+    powershell -Command "Write-Host ('const int ICON_SIZE = {0};' -f [System.IO.File]::ReadAllBytes('assets/icons/password_64x64.png').Length)" >> embedded_assets.h
 
-echo [DEBUG] Assets embedded successfully
+    echo [DEBUG] Assets embedded successfully
+) else (
+    echo [INFO] Using existing embedded_assets.h file
+)
 
 REM Compile executable
 echo [INFO] Compiling executable...
@@ -118,7 +122,7 @@ cl /EHsc /MD /I raylib\include main.cpp icon.res raylib\lib\raylib.lib user32.li
 REM Clean up build artifacts
 del main.obj 2>nul
 del icon.res 2>nul
-del embedded_assets.h 2>nul
+REM Keep embedded_assets.h for future builds
 
 if exist "PassGen.exe" (
     echo [SUCCESS] Executable built successfully: PassGen.exe
@@ -168,7 +172,7 @@ echo [INFO] Executable uploaded: PassGen.exe
 echo [INFO] Cleaning up build artifacts...
 del PassGen.exe 2>nul
 del PassGenInstaller.exe 2>nul
-del embedded_assets.h 2>nul
+REM Keep embedded_assets.h for future builds
 rmdir /s /q raylib 2>nul
 
 start https://github.com/marffinn/passgen/releases/tag/%NEW_TAG%
