@@ -1,3 +1,45 @@
+#include "raylib.h"
+#include "embedded_assets.h"
+#include <string>
+#include <random>
+#include <algorithm>
+#include <fstream>
+#include <sstream>
+#include <vector>
+
+class PasswordGenerator {
+private:
+    std::string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+    std::random_device rd;
+    std::mt19937 gen;
+    
+public:
+    PasswordGenerator() : gen(rd()) {}
+    
+    std::string generate(int length) {
+        std::string password;
+        std::uniform_int_distribution<> dis(0, chars.size() - 1);
+        
+        for (int i = 0; i < length; ++i) {
+            password += chars[dis(gen)];
+        }
+        return password;
+    }
+};
+
+// Encryption functions
+std::string encrypt(const std::string& data) {
+    std::string result = data;
+    for (size_t i = 0; i < result.length(); i++) {
+        result[i] ^= 0x7F;  // Simple XOR encryption
+    }
+    return result;
+}
+
+std::string decrypt(const std::string& data) {
+    return encrypt(data);  // XOR is symmetric, so encrypt = decrypt
+}
+
 int main() {
     const int screenWidth = 450;
     const int screenHeight = 280;
@@ -89,7 +131,7 @@ int main() {
         if (copiedTimer == 0) copied = false;
 
         BeginDrawing();
-        ClearBackground(RAYWHITE); // Changed from DARKGRAY
+        ClearBackground(DARKGRAY);
 
         // Top bar with title (centered)
         DrawRectangle(0, 0, screenWidth, 35, BLUE); // Changed from DARKBLUE
@@ -99,7 +141,7 @@ int main() {
         // Password length with slider (centered)
         const char* lengthText = TextFormat("Length: %d", passwordLength);
         Vector2 lengthSize = MeasureTextEx(font16, lengthText, 16, 0);
-        DrawTextEx(font16, lengthText, {centerX - lengthSize.x/2, 45}, 16, 0, BLACK); // Changed from WHITE
+        DrawTextEx(font16, lengthText, {centerX - lengthSize.x/2, 45}, 16, 0, WHITE);
 
         DrawRectangleRec(sliderBar, GRAY); // Changed from LIGHTGRAY
         DrawRectangleRec(sliderKnob, BLUE); // Changed from DARKBLUE
@@ -129,9 +171,9 @@ int main() {
                 const char* passText = password.c_str();
                 Vector2 textSize = MeasureTextEx(font16, passText, 16, 0);
                 if (textSize.x > screenWidth - 50) {
-                    DrawTextEx(font16, passText, {centerX - textSize.x/2.0f, 150.0f}, 12, 0, BLACK); // Changed from DARKGREEN
+                    DrawTextEx(font16, passText, {centerX - textSize.x/2.0f, 150.0f}, 12, 0, LIME);
                 } else {
-                    DrawTextEx(font16, passText, {centerX - textSize.x/2.0f, 155.0f}, 16, 0, BLACK); // Changed from DARKGREEN
+                    DrawTextEx(font16, passText, {centerX - textSize.x/2.0f, 155.0f}, 16, 0, LIME);
                 }
             } else {
                 DrawTextEx(font16, "Generated password appears here", {centerX - 140.0f, 155.0f}, 16, 0, DARKGRAY); // Changed from GRAY
@@ -201,7 +243,7 @@ int main() {
                     Rectangle editBox = {25.0f, yPos - 2.0f, 120.0f, 16.0f};
                     DrawRectangleRec(editBox, WHITE);
                     DrawRectangleLinesEx(editBox, 1, BLUE); // Changed from DARKBLUE
-                    DrawTextEx(font12, editBuffer, {30, yPos}, 12, 0, BLACK); // Changed from WHITE
+                    DrawTextEx(font12, editBuffer, {30, yPos}, 12, 0, BLACK);
 
                     int key = GetCharPressed();
                     while (key > 0) {
@@ -241,7 +283,7 @@ int main() {
                     // Show password in second column during edit
                     std::string password = libraryPasswords[itemIndex];
                     if (password.length() > 15) password = password.substr(0, 15) + "...";
-                    DrawTextEx(font12, password.c_str(), {150, yPos}, 12, 0, BLACK); // Changed from WHITE
+                    DrawTextEx(font12, password.c_str(), {150, yPos}, 12, 0, WHITE);
                 } else {
                     // Display mode - Service name column
                     Rectangle nameArea = {25.0f, yPos - 2.0f, 120.0f, 16.0f};
@@ -252,12 +294,12 @@ int main() {
 
                     std::string serviceName = serviceNames[itemIndex];
                     if (serviceName.length() > 12) serviceName = serviceName.substr(0, 12) + "...";
-                    DrawTextEx(font12, serviceName.c_str(), {25, yPos}, 12, 0, BLACK); // Changed from WHITE
+                    DrawTextEx(font12, serviceName.c_str(), {25, yPos}, 12, 0, WHITE);
 
                     // Password column
                     std::string password = libraryPasswords[itemIndex];
                     if (password.length() > 15) password = password.substr(0, 15) + "...";
-                    DrawTextEx(font12, password.c_str(), {150, yPos}, 12, 0, BLACK); // Changed from WHITE
+                    DrawTextEx(font12, password.c_str(), {150, yPos}, 12, 0, WHITE);
                 }
 
                 Vector2 copyTextSize = MeasureTextEx(font12, "COPY", 12, 0);
@@ -337,7 +379,7 @@ int main() {
             // Back button (left side)
             Rectangle backButton = {15.0f, 360.0f, 80.0f, 25.0f};
             DrawRectangleRec(backButton, LIGHTGRAY); // Changed from GRAY
-            DrawTextEx(font12, "BACK", {40.0f, 368.0f}, 12, 0, BLACK); // Changed from WHITE
+            DrawTextEx(font12, "BACK", {40.0f, 368.0f}, 12, 0, BLACK);
 
             // Add new entry button (right side)
             Rectangle addButton = {355.0f, 360.0f, 80.0f, 25.0f};
