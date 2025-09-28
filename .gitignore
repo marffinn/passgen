@@ -35,7 +35,7 @@ embed_assets.bat
 icon.rc
 push_and_release.bat
 installer.nsi
-
+build.bat
 # Installer output
 PassGenInstaller.exe
 

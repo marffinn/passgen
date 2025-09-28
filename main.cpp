@@ -40,6 +40,31 @@ std::string decrypt(const std::string& data) {
     return encrypt(data);  // XOR is symmetric, so encrypt = decrypt
 }
 
+// Helper function for crisp text rendering
+void DrawCrispText(Font font, const char* text, Vector2 position, float fontSize, Color tint) {
+    // The key to crisp text is using integer positions and proper spacing
+    
+    // Round to nearest integer for better alignment
+    position.x = roundf(position.x);
+    position.y = roundf(position.y);
+    
+    // For small fonts, ensure perfect pixel alignment by using integer positions
+    if (fontSize <= 20.0f) {
+        position.x = (int)position.x;
+        position.y = (int)position.y;
+    }
+    
+    // For table rows, ensure consistent vertical alignment
+    if (position.y >= 195.0f && position.y <= 350.0f) {
+        // Ensure rows are aligned to 2-pixel boundaries for better appearance
+        position.y = (int)(position.y / 2) * 2;
+    }
+    
+    // Use consistent spacing parameter (1.0f) for all text
+    // This ensures proper glyph spacing and prevents blurry rendering
+    DrawTextEx(font, text, position, fontSize, 1.0f, tint);
+}
+
 int main() {
     const int screenWidth = 450;
     const int screenHeight = 280;
@@ -47,13 +72,19 @@ int main() {
     InitWindow(screenWidth, screenHeight, "Password Generator");
     SetTargetFPS(60);
 
-    // Load FreePixel fonts from embedded data - increased sizes for better readability
-    Font font24 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 24, 0, 95);
-    Font font20 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 20, 0, 95);
-    Font font18 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 18, 0, 95);
-    Font font16 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 16, 0, 95);
-    Font font14 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, 14, 0, 95);
+    // Load FreePixel fonts from embedded data with improved rendering settings
+    // Using consistent font generation parameters for crisp rendering
+    int fontBaseSize = 120;  // Higher base size for better quality
+    int fontChars = 95;      // Standard ASCII character set
+    
+    // Load fonts with consistent parameters for all sizes
+    Font font24 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, fontBaseSize, 0, fontChars);
+    Font font20 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, fontBaseSize, 0, fontChars);
+    Font font18 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, fontBaseSize, 0, fontChars);
+    Font font16 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, fontBaseSize, 0, fontChars);
+    Font font14 = LoadFontFromMemory(".ttf", FONT_DATA, FONT_SIZE, fontBaseSize, 0, fontChars);
 
+    // Apply point filtering to all fonts for crisp pixel-perfect rendering
     SetTextureFilter(font24.texture, TEXTURE_FILTER_POINT);
     SetTextureFilter(font20.texture, TEXTURE_FILTER_POINT);
     SetTextureFilter(font18.texture, TEXTURE_FILTER_POINT);
@@ -135,26 +166,26 @@ int main() {
 
         // Top bar with title (centered)
         DrawRectangle(0, 0, screenWidth, 40, BLUE); 
-        Vector2 titleSize = MeasureTextEx(font20, "Password Generator", 20, 0);
-        DrawTextEx(font20, "Password Generator", {centerX - titleSize.x/2, 10}, 20, 0, WHITE);
+        Vector2 titleSize = MeasureTextEx(font20, "Password Generator", 20, 1.0f);
+        DrawCrispText(font20, "Password Generator", {centerX - titleSize.x/2, 10}, 20, WHITE);
 
         // Password length with slider (centered)
         const char* lengthText = TextFormat("Length: %d", passwordLength);
-        Vector2 lengthSize = MeasureTextEx(font18, lengthText, 18, 0);
-        DrawTextEx(font18, lengthText, {centerX - lengthSize.x/2, 50}, 18, 0, WHITE);
+        Vector2 lengthSize = MeasureTextEx(font18, lengthText, 18, 1.0f);
+        DrawCrispText(font18, lengthText, {centerX - lengthSize.x/2, 50}, 18, WHITE);
 
         DrawRectangleRec(sliderBar, DARKGRAY);
         DrawRectangleRec(sliderKnob, LIME);
-        DrawTextEx(font16, "4", {centerX - 140.0f, 65.0f}, 16, 0, LIGHTGRAY);
-        DrawTextEx(font16, "50", {centerX + 130.0f, 65.0f}, 16, 0, LIGHTGRAY);
+        DrawCrispText(font16, "4", {centerX - 140.0f, 65.0f}, 16, LIGHTGRAY);
+        DrawCrispText(font16, "50", {centerX + 130.0f, 65.0f}, 16, LIGHTGRAY);
 
         // Generate button area (auto-width, centered)
-        Vector2 genSize = MeasureTextEx(font18, "Generate (SPACE)", 18, 0);
+        Vector2 genSize = MeasureTextEx(font18, "Generate (SPACE)", 18, 1.0f);
         float buttonWidth = genSize.x + 20.0f; // Add padding
         Rectangle genButton = {centerX - buttonWidth/2.0f, 95.0f, buttonWidth, 35.0f};
         DrawRectangleRec(genButton, LIME);
         float genButtonCenterY = genButton.y + genButton.height/2.0f - genSize.y/2.0f;
-        DrawTextEx(font18, "Generate (SPACE)", {centerX - genSize.x/2, genButtonCenterY}, 18, 0, BLACK);
+        DrawCrispText(font18, "Generate (SPACE)", {centerX - genSize.x/2, genButtonCenterY}, 18, BLACK);
 
         if (CheckCollisionPointRec(GetMousePosition(), genButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             password = passGen.generate(passwordLength);
@@ -169,14 +200,16 @@ int main() {
 
             if (!password.empty()) {
                 const char* passText = password.c_str();
-                Vector2 textSize = MeasureTextEx(font18, passText, 18, 0);
+                Vector2 textSize = MeasureTextEx(font18, passText, 18, 1.0f);
                 if (textSize.x > screenWidth - 50) {
-                    DrawTextEx(font16, passText, {centerX - textSize.x/2.0f, 155.0f}, 16, 0, LIME);
+                    Vector2 smallerTextSize = MeasureTextEx(font16, passText, 16, 1.0f);
+                    DrawCrispText(font16, passText, {centerX - smallerTextSize.x/2.0f, 155.0f}, 16, LIME);
                 } else {
-                    DrawTextEx(font18, passText, {centerX - textSize.x/2.0f, 155.0f}, 18, 0, LIME);
+                    DrawCrispText(font18, passText, {centerX - textSize.x/2.0f, 155.0f}, 18, LIME);
                 }
             } else {
-                DrawTextEx(font16, "Generated password appears here", {centerX - 140.0f, 155.0f}, 16, 0, LIGHTGRAY);
+                Vector2 placeholderSize = MeasureTextEx(font16, "Generated password appears here", 16, 1.0f);
+                DrawCrispText(font16, "Generated password appears here", {centerX - placeholderSize.x/2.0f, 155.0f}, 16, LIGHTGRAY);
             }
 
             // Copy and Library buttons
@@ -187,11 +220,11 @@ int main() {
             DrawRectangleRec(libraryButton, BLUE);
 
             const char* copyText = copied ? "Copied to clipboard!" : "COPY";
-            Vector2 copySize = MeasureTextEx(font18, copyText, 18, 0);
-            Vector2 libSize = MeasureTextEx(font18, "LIBRARY", 18, 0);
+            Vector2 copySize = MeasureTextEx(font18, copyText, 18, 1.0f);
+            Vector2 libSize = MeasureTextEx(font18, "LIBRARY", 18, 1.0f);
 
-            DrawTextEx(font18, copyText, {115.0f - copySize.x/2.0f, 213.0f}, 18, 0, WHITE);
-            DrawTextEx(font18, "LIBRARY", {335.0f - libSize.x/2.0f, 213.0f}, 18, 0, WHITE);
+            DrawCrispText(font18, copyText, {115.0f - copySize.x/2.0f, 213.0f}, 18, WHITE);
+            DrawCrispText(font18, "LIBRARY", {335.0f - libSize.x/2.0f, 213.0f}, 18, WHITE);
 
             if (CheckCollisionPointRec(GetMousePosition(), copyButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !password.empty()) {
                 SetClipboardText(password.c_str());
@@ -205,16 +238,17 @@ int main() {
             }
         } else {
             // Library view
-            DrawTextEx(font18, "Password Library (Encrypted)", {centerX - 140.0f, 145}, 18, 0, LIME);
+            Vector2 libraryTitleSize = MeasureTextEx(font18, "Password Library (Encrypted)", 18, 1.0f);
+            DrawCrispText(font18, "Password Library (Encrypted)", {centerX - libraryTitleSize.x/2.0f, 145}, 18, LIME);
 
             Rectangle libraryArea = {15.0f, 170.0f, (float)(screenWidth - 30), 180.0f};
             DrawRectangleRec(libraryArea, DARKGRAY);
             DrawRectangleLinesEx(libraryArea, 2, BLUE);
 
-            // Table headers (always visible)
-            DrawTextEx(font16, "Service Name", {25, 175}, 16, 0, LIME);
-            DrawTextEx(font16, "Password", {150, 175}, 16, 0, LIME);
-            DrawTextEx(font16, "Actions", {320, 175}, 16, 0, LIME);
+            // Table headers (always visible) - use integer positions for pixel-perfect alignment
+            DrawCrispText(font16, "Service Name", {25, 175}, 16, LIME);
+            DrawCrispText(font16, "Password", {150, 175}, 16, LIME);
+            DrawCrispText(font16, "Actions", {320, 175}, 16, LIME);
 
             // Header separator line
             DrawLine(20, 190, 415, 190, BLUE);
@@ -236,6 +270,7 @@ int main() {
             // Display services
             for (int i = 0; i < std::min(totalItems - scrollOffset, maxVisible); i++) {
                 int itemIndex = i + scrollOffset;
+                // Use integer positions for pixel-perfect alignment
                 float yPos = 195.0f + i * 20.0f;
 
                 if (editingIndex == itemIndex) {
@@ -243,7 +278,7 @@ int main() {
                     Rectangle editBox = {25.0f, yPos - 2.0f, 120.0f, 18.0f};
                     DrawRectangleRec(editBox, WHITE);
                     DrawRectangleLinesEx(editBox, 1, BLUE);
-                    DrawTextEx(font14, editBuffer, {30, yPos}, 14, 0, BLACK);
+                    DrawCrispText(font14, editBuffer, {30, yPos}, 14, BLACK);
 
                     int key = GetCharPressed();
                     while (key > 0) {
@@ -283,7 +318,7 @@ int main() {
                     // Show password in second column during edit
                     std::string password = libraryPasswords[itemIndex];
                     if (password.length() > 15) password = password.substr(0, 15) + "...";
-                    DrawTextEx(font14, password.c_str(), {150, yPos}, 14, 0, LIME);
+                    DrawCrispText(font14, password.c_str(), {150, yPos}, 14, LIME);
                 } else {
                     // Display mode - Service name column
                     Rectangle nameArea = {25.0f, yPos - 2.0f, 120.0f, 18.0f};
@@ -294,15 +329,15 @@ int main() {
 
                     std::string serviceName = serviceNames[itemIndex];
                     if (serviceName.length() > 12) serviceName = serviceName.substr(0, 12) + "...";
-                    DrawTextEx(font14, serviceName.c_str(), {25, yPos}, 14, 0, WHITE);
+                    DrawCrispText(font14, serviceName.c_str(), {25, yPos}, 14, WHITE);
 
                     // Password column
                     std::string password = libraryPasswords[itemIndex];
                     if (password.length() > 15) password = password.substr(0, 15) + "...";
-                    DrawTextEx(font14, password.c_str(), {150, yPos}, 14, 0, LIME);
+                    DrawCrispText(font14, password.c_str(), {150, yPos}, 14, LIME);
                 }
 
-                Vector2 copyTextSize = MeasureTextEx(font14, "COPY", 14, 0);
+                Vector2 copyTextSize = MeasureTextEx(font14, "COPY", 14, 1.0f);
                 float copyBtnWidth = copyTextSize.x + 10.0f;
 
                 Rectangle copyBtn = {280.0f, yPos - 2.0f, copyBtnWidth, 18.0f};
@@ -313,9 +348,10 @@ int main() {
                 DrawRectangleRec(genBtn, GREEN);
                 DrawRectangleRec(delBtn, RED);
 
-                DrawTextEx(font14, "COPY", {284.0f, yPos}, 14, 0, WHITE);
-                DrawTextEx(font14, "GEN", {290.0f + copyBtnWidth, yPos}, 14, 0, WHITE);
-                DrawTextEx(font14, "DEL", {330.0f + copyBtnWidth, yPos}, 14, 0, WHITE);
+                // Use integer positions for button text to ensure pixel-perfect alignment
+                DrawCrispText(font14, "COPY", {284.0f, yPos}, 14, WHITE);
+                DrawCrispText(font14, "GEN", {290.0f + copyBtnWidth, yPos}, 14, WHITE);
+                DrawCrispText(font14, "DEL", {330.0f + copyBtnWidth, yPos}, 14, WHITE);
 
                 if (CheckCollisionPointRec(GetMousePosition(), copyBtn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     SetClipboardText(libraryPasswords[itemIndex].c_str());
@@ -379,12 +415,14 @@ int main() {
             // Back button (left side)
             Rectangle backButton = {15.0f, 360.0f, 80.0f, 30.0f};
             DrawRectangleRec(backButton, DARKGRAY);
-            DrawTextEx(font16, "BACK", {35.0f, 367.0f}, 16, 0, WHITE);
+            Vector2 backTextSize = MeasureTextEx(font16, "BACK", 16, 1.0f);
+            DrawCrispText(font16, "BACK", {15.0f + (80.0f - backTextSize.x)/2, 367.0f}, 16, WHITE);
 
             // Add new entry button (right side)
             Rectangle addButton = {355.0f, 360.0f, 80.0f, 30.0f};
             DrawRectangleRec(addButton, BLUE);
-            DrawTextEx(font16, "ADD NEW", {360.0f, 367.0f}, 16, 0, WHITE);
+            Vector2 addTextSize = MeasureTextEx(font16, "ADD NEW", 16, 1.0f);
+            DrawCrispText(font16, "ADD NEW", {355.0f + (80.0f - addTextSize.x)/2, 367.0f}, 16, WHITE);
 
             if (CheckCollisionPointRec(GetMousePosition(), addButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 serviceNames.push_back("new_service");
